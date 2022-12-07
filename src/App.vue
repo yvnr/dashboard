@@ -1,30 +1,65 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div class="app">
+    <LeftNavigationBar />
+    <router-view />
+  </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script>
+import "@coreui/coreui/dist/css/coreui.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Applications from "./views/Applications.vue";
+import LeftNavigationBar from "./components/LeftNavigationBar.vue";
+
+export default {
+  name: "App",
+  components: {
+    Applications,
+    LeftNavigationBar,
+  },
+};
+</script>
+
+<style lang="scss">
+:root {
+  --primary: #50ad72;
+  --grey: #64748b;
+  --dark: #1e293b;
+  --dark-alt: #334155;
+  --light: #f1f5f9;
+  --sidebar-width: 300px;
 }
 
-nav {
-  padding: 30px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Fira sans", sans-serif;
 }
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
+body {
+  background: var(--light);
 }
 
-nav a.router-link-exact-active {
-  color: #42b983;
+// for arrow in SideBar
+button {
+  cursor: pointer;
+  appearance: none;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+.app {
+  display: flex;
+
+  main {
+    flex: 1 1 0;
+    padding: 2rem;
+
+    @media (max-width: 1024px) {
+      padding-left: 6rem;
+    }
+  }
 }
 </style>
