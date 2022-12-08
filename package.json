@@ -12,6 +12,7 @@
     "@coreui/icons": "^2.1.0",
     "@coreui/icons-vue": "^2.0.0",
     "@coreui/vue": "^4.5.0",
+    "axios": "^1.2.1",
     "bootstrap": "^5.2.3",
     "core-js": "^3.8.3",
     "vue": "^3.2.13",
