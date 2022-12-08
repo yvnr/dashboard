@@ -1,12 +1,14 @@
 <template>
-<HeaderComponent></HeaderComponent>
-  <div class="app">
-    <LeftNavigationBar />
-    <div class="container-fluid">
-      <router-view />
+  <div>
+    <HeaderComponent></HeaderComponent>
+    <div class="app">
+      <LeftNavigationBar />
+      <div class="container-fluid">
+        <router-view />
+      </div>
     </div>
-  </div>
   <FooterComponent />
+  </div>
 </template>
 
 <script>
