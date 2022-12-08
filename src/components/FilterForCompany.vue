@@ -4,13 +4,15 @@
       <CContainer fluid>
         <CRow class="justify-content-start form-control">
           <CCol xs="6" md="6">
-            <label><b>Company: </b></label>
+            <label for="company"><b>Company: </b>
             <input
               type="text"
               v-model="company"
               name="company"
+              id = "company"
               placeholder="Search for Company"
             />
+            </label>
           </CCol>
           <CCol xs="2" md="1">
             <input
@@ -26,15 +28,14 @@
 </template>
 
 <script>
-import { CContainer, CRow, CCol } from "@coreui/vue";
+import { CContainer, CRow, CCol } from '@coreui/vue';
 
 export default {
-  setup() {},
-  name: "FilterForCompany",
+  name: 'FilterForCompany',
   components: { CContainer, CRow, CCol },
   data() {
     return {
-      company: "",
+      company: '',
     };
   },
   methods: {
@@ -50,11 +51,11 @@ export default {
         company: this.company,
       };
 
-      this.$emit("filtered-on-company", searchCriteria);
+      this.$emit('filtered-on-company', searchCriteria);
     },
     validationForEmptyValues() {
       if (!this.company) {
-        alert("Please enter the company you want to search for");
+        alert('Please enter the company you want to search for');
         return true;
       }
       return false;

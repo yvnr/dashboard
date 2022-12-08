@@ -14,23 +14,22 @@
 </template>
 
 <script>
-import AggregateValue from "./AggregateValue.vue";
-import { CContainer, CRow, CCol, CWidgetStatsF } from "@coreui/vue";
-import { CIcon } from "@coreui/icons-vue";
-import * as icon from "@coreui/icons";
+import {
+  CContainer, CRow, CCol,
+} from '@coreui/vue';
+import * as icon from '@coreui/icons';
+import AggregateValue from './AggregateValue.vue';
 
 export default {
-  name: "AggregateValueList",
+  name: 'AggregateValueList',
   props: {
     aggregateValues: Array,
   },
   components: {
     AggregateValue,
-    CIcon,
     CContainer,
     CRow,
     CCol,
-    CWidgetStatsF,
   },
   setup() {
     return {

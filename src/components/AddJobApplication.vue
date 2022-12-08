@@ -2,28 +2,34 @@
  <div class="container-fluid">
      <form @submit="onSubmit" class="add-form">
     <div class="form-control">
-      <label>Company</label>
-      <input type="text" v-model="company" name="company" placeholder="Add Company" />
+      <label for="company">Company
+      <input type="text" v-model="company" name="company" id="company" placeholder="Add Company" />
+      </label>
     </div>
     <div class="form-control">
-      <label>Position</label>
-      <input type="text" v-model="position" name="position" placeholder="Add Position"/>
+      <label for="position">Position
+      <input type="text" v-model="position" name="position" id="position" placeholder="Add Position"/>
+      </label>
     </div>
     <div class="form-control">
-      <label>Duration</label>
-      <input type="text" v-model="duration" name="duration" placeholder="Add Duration"/>
+      <label for="duration">Duration
+      <input type="text" v-model="duration" name="duration" id="duration" placeholder="Add Duration"/>
+      </label>
     </div>
     <div class="form-control">
-      <label>Job ID</label>
-      <input type="text" v-model="jobID" name="jobID" placeholder="Add Job ID"/>
+      <label for="jobID">Job ID
+      <input type="text" v-model="jobID" name="jobID" id="jobID" placeholder="Add Job ID"/>
+      </label>
     </div>
     <div class="form-control">
-      <label>Location</label>
-      <input type="text" v-model="location" name="location" placeholder="Add Location"/>
+      <label for="location">Location
+      <input type="text" v-model="location" name="location" id="location" placeholder="Add Location"/>
+      </label>
     </div>
     <div class="form-control">
-      <label>Status</label>
-      <input type="text" v-model="status" name="status" placeholder="Add Status"/>
+      <label for="status">Status
+      <input type="text" v-model="status" name="status" id="status" placeholder="Add Status"/>
+      </label>
     </div>
     <input type="submit" value="Add Application" class="submit" />
   </form>
@@ -32,16 +38,15 @@
 
 <script>
 export default {
-  name: "AddJobApplication",
-  setup() {},
+  name: 'AddJobApplication',
   data() {
     return {
-      company: "",
-      position: "",
-      duration: "",
-      jobID: "",
-      location: "",
-      status: "Applied",
+      company: '',
+      position: '',
+      duration: '',
+      jobID: '',
+      location: '',
+      status: 'Applied',
     };
   },
   methods: {
@@ -63,32 +68,32 @@ export default {
       console.log(application);
       // TODO: need to post this data
 
-      this.company = "";
-      this.position = "";
-      this.duration = "";
-      this.jobID = "";
-      this.location = "";
-      this.status = "Applied";
+      this.company = '';
+      this.position = '';
+      this.duration = '';
+      this.jobID = '';
+      this.location = '';
+      this.status = 'Applied';
     },
     validationForEmptyValues() {
       if (!this.company) {
-        alert("Please enter the company you applied for");
+        alert('Please enter the company you applied for');
         return true;
       }
       if (!this.position) {
-        alert("Please enter position you applied for");
+        alert('Please enter position you applied for');
         return true;
       }
       if (!this.duration) {
-        alert("Please enter duration you applied for");
+        alert('Please enter duration you applied for');
         return true;
       }
       if (!this.jobID) {
-        alert("Please enter Job ID");
+        alert('Please enter Job ID');
         return true;
       }
       if (!this.location) {
-        alert("Please enter the location");
+        alert('Please enter the location');
         return true;
       }
       if (!this.status) {
@@ -100,7 +105,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped >
 .submit {

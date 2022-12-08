@@ -34,8 +34,7 @@
 
 <script>
 export default {
-  name: "CompanyWiseData",
-  setup() {},
+  name: 'CompanyWiseData',
   props: {
     filterKey: Object,
   },
@@ -43,110 +42,110 @@ export default {
     return {
       gridColumns: [],
       gridData: [],
-      sortKey: "",
+      sortKey: '',
       sortOrders: {},
     };
   },
   created() {
     //   TODO Need to fetch this data from API
     this.gridColumns = [
-      "Company",
-      "Applied",
-      "Assessment",
-      "Interview",
-      "Accepted",
-      "Rejected",
+      'Company',
+      'Applied',
+      'Assessment',
+      'Interview',
+      'Accepted',
+      'Rejected',
     ];
     this.gridData = [
       {
-        Company: "Amazon",
-        Applied: "100",
-        Assessment: "40",
-        Interview: "20",
-        Accepted: "5",
-        Rejected: "25",
+        Company: 'Amazon',
+        Applied: '100',
+        Assessment: '40',
+        Interview: '20',
+        Accepted: '5',
+        Rejected: '25',
       },
       {
-        Company: "Meta",
-        Applied: "10",
-        Assessment: "40",
-        Interview: "20",
-        Accepted: "5",
-        Rejected: "25",
+        Company: 'Meta',
+        Applied: '10',
+        Assessment: '40',
+        Interview: '20',
+        Accepted: '5',
+        Rejected: '25',
       },
       {
-        Company: "Google",
-        Applied: "100",
-        Assessment: "40",
-        Interview: "20",
-        Accepted: "5",
-        Rejected: "25",
+        Company: 'Google',
+        Applied: '100',
+        Assessment: '40',
+        Interview: '20',
+        Accepted: '5',
+        Rejected: '25',
       },
       {
-        Company: "Netflix",
-        Applied: "100",
-        Assessment: "40",
-        Interview: "20",
-        Accepted: "5",
-        Rejected: "25",
+        Company: 'Netflix',
+        Applied: '100',
+        Assessment: '40',
+        Interview: '20',
+        Accepted: '5',
+        Rejected: '25',
       },
       {
-        Company: "Salesforce",
-        Applied: "100",
-        Assessment: "40",
-        Interview: "20",
-        Accepted: "5",
-        Rejected: "25",
+        Company: 'Salesforce',
+        Applied: '100',
+        Assessment: '40',
+        Interview: '20',
+        Accepted: '5',
+        Rejected: '25',
       },
       {
-        Company: "Snowflake",
-        Applied: "100",
-        Assessment: "40",
-        Interview: "20",
-        Accepted: "5",
-        Rejected: "25",
+        Company: 'Snowflake',
+        Applied: '100',
+        Assessment: '40',
+        Interview: '20',
+        Accepted: '5',
+        Rejected: '25',
       },
       {
-        Company: "HRT",
-        Applied: "100",
-        Assessment: "40",
-        Interview: "20",
-        Accepted: "5",
-        Rejected: "25",
+        Company: 'HRT',
+        Applied: '100',
+        Assessment: '40',
+        Interview: '20',
+        Accepted: '5',
+        Rejected: '25',
       },
       {
-        Company: "TuSimple",
-        Applied: "100",
-        Assessment: "40",
-        Interview: "20",
-        Accepted: "5",
-        Rejected: "25",
+        Company: 'TuSimple',
+        Applied: '100',
+        Assessment: '40',
+        Interview: '20',
+        Accepted: '5',
+        Rejected: '25',
       },
     ];
     this.sortOrders = this.gridColumns.reduce(
       (o, key) => ((o[key] = 1), o),
-      {}
+      {},
     );
   },
   computed: {
     filteredData() {
-      const sortKey = this.sortKey;
-      const filterKey =
-        this.filterKey.company && this.filterKey.company.toLowerCase();
+      const { sortKey } = this;
+      const filterKey = this.filterKey.company && this.filterKey.company.toLowerCase();
       const order = this.sortOrders[sortKey] || 1;
       let data = this.gridData;
       if (filterKey) {
-        data = data.filter((row) => {
-          return Object.keys(row).some((key) => {
-            return String(row[key]).toLowerCase().indexOf(filterKey) > -1;
-          });
-        });
+        data = data.filter(
+          (row) => Object.keys(row).some(
+            (key) => String(row[key]).toLowerCase().indexOf(filterKey) > -1,
+          ),
+        );
       }
       if (sortKey) {
         data = data.slice().sort((a, b) => {
-          a = a[sortKey];
-          b = b[sortKey];
-          return (a === b ? 0 : a > b ? 1 : -1) * order;
+          const x = a[sortKey];
+          const y = b[sortKey];
+          const t1 = x > y ? 1 : -1;
+          return (x === y ? 0 : t1) * order;
         });
       }
       return data;
@@ -155,7 +154,7 @@ export default {
   methods: {
     sortBy(key) {
       this.sortKey = key;
-      this.sortOrders[key] = this.sortOrders[key] * -1;
+      this.sortOrders[key] *= -1;
     },
     capitalize(str) {
       return str.charAt(0).toUpperCase() + str.slice(1);
@@ -163,7 +162,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 table {

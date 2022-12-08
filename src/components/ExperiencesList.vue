@@ -2,33 +2,24 @@
   <div container-fluid>
     <CAccordion always-open>
       <div :key="experience.id" v-for="experience in experiences">
-        <Experience :experience="experience"></Experience>
+        <InterviewExperience :experience="experience"></InterviewExperience>
       </div>
     </CAccordion>
   </div>
 </template>
 
 <script>
-import Experience from "./Experience.vue";
-import {
-  CAccordion,
-  CAccordionItem,
-  CAccordionHeader,
-  CAccordionBody,
-} from "@coreui/vue";
+import { CAccordion } from '@coreui/vue';
+import InterviewExperience from './InterviewExperience.vue';
 
 export default {
-  name: "ExperiencesList",
-  setup() {},
+  name: 'ExperiencesList',
   props: {
     experiences: Array,
   },
   components: {
-    Experience,
+    InterviewExperience,
     CAccordion,
-    CAccordionItem,
-    CAccordionHeader,
-    CAccordionBody,
   },
 };
 </script>

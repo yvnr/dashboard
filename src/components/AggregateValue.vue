@@ -13,20 +13,17 @@
 </template>
 
 <script>
-import { CContainer, CRow, CCol, CWidgetStatsF } from "@coreui/vue";
-import { CIcon } from "@coreui/icons-vue";
-import * as icon from "@coreui/icons";
+import { CWidgetStatsF } from '@coreui/vue';
+import { CIcon } from '@coreui/icons-vue';
+import * as icon from '@coreui/icons';
 
 export default {
-  name: "AggregateValue",
+  name: 'AggregateValue',
   props: {
     aggregateValue: Object,
   },
   components: {
     CIcon,
-    CContainer,
-    CRow,
-    CCol,
     CWidgetStatsF,
   },
   setup() {
@@ -36,19 +33,18 @@ export default {
   },
   methods: {
     selectIcon(text) {
-      if (text == "Offers") {
+      if (text === 'Offers') {
         return icon.cilCheck;
       }
       return icon.cilSettings;
     },
     selectColor(text) {
-      if (text == "Offers") {
-        return "success";
-      } else if (text == "Applications In Progress") {
-        return "info";
-      } else {
-        return "primary";
+      if (text === 'Offers') {
+        return 'success';
+      } if (text === 'Applications In Progress') {
+        return 'info';
       }
+      return 'primary';
     },
   },
 };

@@ -6,15 +6,13 @@
 </template>
 
 <script>
-import "@coreui/coreui/dist/css/coreui.min.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Applications from "./views/Applications.vue";
-import LeftNavigationBar from "./components/LeftNavigationBar.vue";
+import '@coreui/coreui/dist/css/coreui.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import LeftNavigationBar from './components/LeftNavigationBar.vue';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
-    Applications,
     LeftNavigationBar,
   },
 };

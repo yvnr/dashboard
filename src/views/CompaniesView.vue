@@ -6,14 +6,12 @@
   </main>
 </template>
 
-
 <script>
-import FilterForCompany from "../components/FilterForCompany.vue";
-import CompanyWiseData from "../components/CompanyWiseData.vue";
+import FilterForCompany from '../components/FilterForCompany.vue';
+import CompanyWiseData from '../components/CompanyWiseData.vue';
 
 export default {
-  name: "Companies",
-  setup() {},
+  name: 'CompaniesView',
   components: {
     FilterForCompany,
     CompanyWiseData,

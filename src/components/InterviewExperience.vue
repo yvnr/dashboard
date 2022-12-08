@@ -17,7 +17,6 @@
   </CAccordionItem>
 </template>
 
-
 <script>
 import {
   CAccordionItem,
@@ -26,11 +25,10 @@ import {
   CContainer,
   CRow,
   CCol,
-} from "@coreui/vue";
+} from '@coreui/vue';
 
 export default {
-  name: "Experience",
-  setup() {},
+  name: 'InterviewExperience',
   props: {
     experience: Object,
   },

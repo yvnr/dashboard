@@ -6,10 +6,9 @@
 
 <script>
 export default {
-  setup() {},
   methods: {
     onClick() {
-      this.$emit("toggle-add-job-application-form");
+      this.$emit('toggle-add-job-application-form');
     },
   },
 };
