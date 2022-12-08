@@ -1,7 +1,11 @@
 <template>
   <div class="app">
     <LeftNavigationBar />
-    <router-view />
+    <div class="container-fluid">
+      <!-- <HeaderComponent></HeaderComponent> -->
+      <router-view />
+      <FooterComponent />
+    </div>
   </div>
 </template>
 
@@ -9,11 +13,15 @@
 import '@coreui/coreui/dist/css/coreui.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LeftNavigationBar from './components/LeftNavigationBar.vue';
+import FooterComponent from './components/FooterComponent.vue';
+// import HeaderComponent from './components/HeaderComponent.vue';
 
 export default {
   name: 'App',
   components: {
     LeftNavigationBar,
+    FooterComponent,
+    // HeaderComponent,
   },
 };
 </script>
@@ -22,6 +30,7 @@ export default {
 :root {
   --primary: #50ad72;
   --grey: #64748b;
+  --light-grey:  #e3e5e7;
   --dark: #1e293b;
   --dark-alt: #334155;
   --light: #f1f5f9;
