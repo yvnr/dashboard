@@ -1,11 +1,11 @@
 <template>
   <main id="applications">
     <AggregateValueList :aggregateValues="aggregateValues"></AggregateValueList>
-    <DisplayAddJobApplicationForm
+    <DisplayAddJobApplicationForm :displayToggleButton="!showAddJobApplication"
       @toggle-add-job-application-form="toggleAddJobAppliation"
     ></DisplayAddJobApplicationForm>
     <div v-show="showAddJobApplication">
-      <AddJobApplication></AddJobApplication>
+      <AddJobApplication @toggle-add-job-application-form="toggleAddJobAppliation"></AddJobApplication>
     </div>
     <JobsApplied></JobsApplied>
   </main>
