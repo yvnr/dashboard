@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-  <form @submit="register">
+  <form @submit.stop.prevent="register">
     <label for="name"><b>Name</b>
        <input type="text" v-model="name" name="name" id="name" placeholder="Enter name" required/>
     </label>
@@ -13,21 +13,22 @@
     <label for="university"><b>University</b>
         <select v-model="univId">
           <option disabled value="">Please select one</option>
-          <option v-for="univ in univList" :key ="univ.id" :value="univ.id">
+          <option v-for="univ in univList " :key ="univ.id" :value="univ.id">
             {{univ.name}}
           </option>
         </select>
     </label>
+    <div class="error" v-show="error" >{{error}}</div>
     <button type="submit" class="registerbtn">Register</button>
-  <div class="container signin">
-    <p>Already have an account? <a href="#">Sign in</a>.</p>
+  <div class="container login">
+    <p>Already have an account? <a href="/login">Sign in</a>.</p>
   </div>
 </form>
 </div>
  </template>
 
 <script lang="ts">
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
@@ -41,12 +42,7 @@ export default {
     const univId = ref(null);
     const password = ref(null);
     const error = ref(null);
-    const univList = ref([
-      {
-        id: 'p33MTIpiLZgW2tv9nkCt',
-        name: 'UMass Amherst',
-      },
-    ]);
+    const univList = ref([]);
 
     const store = useStore();
     const router = useRouter();
@@ -54,16 +50,27 @@ export default {
     async function register() {
       try {
         const resp = await axios.post('http://localhost:8000/api/user/register', {
-          email, password, univId, name,
+          email: email.value, password: password.value, univId: univId.value, name: name.value,
         });
         const { sessionToken } = resp.data;
         const response = await signInWithCustomToken(auth, sessionToken);
         store.dispatch('populateUser', response);
         router.push('/');
       } catch (err: any) {
+        console.info(err);
         error.value = err.message;
       }
     }
+
+    watchEffect(async () => {
+      try {
+        const resp = await axios.get('http://localhost:8000/api/university');
+        console.log(resp);
+        univList.value = resp.data;
+      } catch (err: any) {
+        univList.value = [];
+      }
+    });
 
     return {
       register, name, email, univId, password, error, univList,
@@ -136,8 +143,12 @@ a {
 }
 
 /* Set a grey background color and center the text of the "sign in" section */
-.signin {
+.login {
   background-color: #f1f1f1;
   text-align: center;
+}
+
+.error {
+  color: crimson;
 }
 </style>

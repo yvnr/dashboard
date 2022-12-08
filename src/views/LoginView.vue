@@ -1,15 +1,16 @@
 <template>
   <div class="container">
-<form @submit="login">
+<form @submit.stop.prevent="login">
   <label for="email"><b>Email</b>
     <input type="text" v-model="email" name="email" id="email" placeholder="Enter email" required/>
   </label>
   <label for="password"><b>Password</b>
     <input type="password" v-model="password" name="password" id="password" placeholder="Enter Password" required/>
   </label>
+  <div class="error" v-show="error" >{{error}}</div>
   <button type="submit" class="registerbtn">Login</button>
-<div class="container signin">
-  <p>No account? <a href="#">Create one</a>.</p>
+<div class="container register">
+  <p>No account? <a href="/register">Create one</a>.</p>
 </div>
 </form>
 </div>
@@ -26,7 +27,7 @@ export default defineComponent({
   setup() {
     const email = ref('');
     const password = ref('');
-    const error = ref('');
+    const error = ref(null);
 
     const store = useStore();
     const router = useRouter();
@@ -109,8 +110,12 @@ a {
 }
 
 /* Set a grey background color and center the text of the "sign in" section */
-.signin {
+.register {
   background-color: #f1f1f1;
   text-align: center;
+}
+
+.error {
+  color: crimson;
 }
 </style>
