@@ -1,12 +1,12 @@
 <template>
+<HeaderComponent></HeaderComponent>
   <div class="app">
     <LeftNavigationBar />
     <div class="container-fluid">
-      <!-- <HeaderComponent></HeaderComponent> -->
       <router-view />
-      <FooterComponent />
     </div>
   </div>
+  <FooterComponent />
 </template>
 
 <script>
@@ -14,14 +14,14 @@ import '@coreui/coreui/dist/css/coreui.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LeftNavigationBar from './components/LeftNavigationBar.vue';
 import FooterComponent from './components/FooterComponent.vue';
-// import HeaderComponent from './components/HeaderComponent.vue';
+import HeaderComponent from './components/HeaderComponent.vue';
 
 export default {
   name: 'App',
   components: {
     LeftNavigationBar,
     FooterComponent,
-    // HeaderComponent,
+    HeaderComponent,
   },
 };
 </script>
@@ -61,7 +61,7 @@ button {
   display: flex;
 
   main {
-    flex: 1 1 0;
+    flex: 1 1 0%;
     padding: 2rem;
 
     @media (max-width: 1024px) {
