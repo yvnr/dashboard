@@ -1,5 +1,6 @@
 <template lang="">
  <div class="container-fluid">
+      <h3>Application Form:</h3>
      <form @submit="onSubmit" class="add-form">
     <div class="form-control">
       <label for="company">Company
@@ -28,15 +29,25 @@
     </div>
     <div class="form-control">
       <label for="status">Status
-      <input type="text" v-model="status" name="status" id="status" placeholder="Add Status"/>
+      <select v-model="status" name="status" id="status">
+        <option disabled value="">Please select your applications current status</option>
+        <option>Applied</option>
+        <option>Assessment</option>
+        <option>Interview</option>
+        <option>Accepted</option>
+        <option>Rejected</option>
+      </select>
       </label>
     </div>
-    <input type="submit" value="Add Application" class="submit" />
+    <input type="submit" value="Add" class="submit" />
+    <input type="button" value="Close" class="button"  @click="onClick()"/>
   </form>
  </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'AddJobApplication',
   data() {
@@ -46,11 +57,11 @@ export default {
       duration: '',
       jobID: '',
       location: '',
-      status: 'Applied',
+      status: '',
     };
   },
   methods: {
-    onSubmit(e) {
+    async onSubmit(e) {
       e.preventDefault();
 
       if (this.validationForEmptyValues()) {
@@ -66,14 +77,23 @@ export default {
         status: this.status,
       };
       console.log(application);
-      // TODO: need to post this data
-
+      try {
+        // const res = await axios.post('http://localhost:3000/items', application);
+        const res = {};
+        console.log(res);
+        // this.items = [res.data, ...this.items];
+      } catch (error) {
+        console.log(error);
+      }
       this.company = '';
       this.position = '';
       this.duration = '';
       this.jobID = '';
       this.location = '';
-      this.status = 'Applied';
+      this.status = '';
+    },
+    onClick() {
+      this.$emit('toggle-add-job-application-form');
     },
     validationForEmptyValues() {
       if (!this.company) {
@@ -97,7 +117,7 @@ export default {
         return true;
       }
       if (!this.status) {
-        alert("Please enter your application's current status");
+        alert("Please select your application's current status");
         return true;
       }
       return false;
@@ -111,6 +131,13 @@ export default {
   padding: 3px 7px;
 }
 
+.button {
+  padding: 3px 7px;
+  align-items: center;
+  /* border-style :groove; */
+  margin-left: 1rem;
+}
+
 .add-form {
   margin-bottom: 40px;
 }
@@ -121,6 +148,13 @@ export default {
   display: block;
 }
 .form-control input {
+  width: 100%;
+  height: 40px;
+  margin: 5px;
+  padding: 3px 7px;
+  font-size: 17px;
+}
+.form-control select {
   width: 100%;
   height: 40px;
   margin: 5px;

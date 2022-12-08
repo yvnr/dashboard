@@ -13,56 +13,89 @@
 
 <script>
 import { CTable } from '@coreui/vue';
+import axios from 'axios';
 
 export default {
   data: () => ({
     columns: [
       {
-        key: 'id',
-        label: '#',
+        key: 'company',
+        label: 'Company',
         _props: { scope: 'col' },
       },
       {
-        key: 'class',
+        key: 'position',
+        label: 'Position',
         _props: { scope: 'col' },
       },
       {
-        key: 'heading_1',
-        label: 'Heading',
+        key: 'status',
+        label: 'Status',
         _props: { scope: 'col' },
       },
       {
-        key: 'heading_2',
-        label: 'Heading',
+        key: 'jobID',
+        label: 'JobID',
+        _props: { scope: 'col' },
+      },
+      {
+        key: 'location',
+        label: 'Location',
+        _props: { scope: 'col' },
+      },
+      {
+        key: 'time',
+        label: 'Time',
         _props: { scope: 'col' },
       },
     ],
-    items: [
-      {
-        id: 1,
-        class: 'Mark',
-        heading_1: 'Otto',
-        heading_2: '@mdo',
-        _cellProps: { id: { scope: 'row' } },
-      },
-      {
-        id: 2,
-        class: 'Jacob',
-        heading_1: 'Thornton',
-        heading_2: '@fat',
-        _cellProps: { id: { scope: 'row' } },
-      },
-      {
-        id: 3,
-        class: 'Larry the Bird',
-        heading_1: 'Tesla',
-        heading_2: '@twitter',
-        _cellProps: { id: { scope: 'row' } },
-      },
-    ],
+    items: [],
   }),
   components: {
     CTable,
+  },
+  created() {
+    this.fetch();
+  },
+  methods: {
+    async fetch() {
+      try {
+        // const res = await axios.get('http://localhost:3000/items');
+        const res = {};
+        console.log(res);
+        this.items = [
+          {
+            company: 'Amazon',
+            position: 'Software Developement Engineer',
+            status: 'Applied',
+            jobID: '89624',
+            location: 'Bposton, MA',
+            time: '2022-01-12',
+            _cellProps: { id: { scope: 'row' } },
+          },
+          {
+            company: 'Meta',
+            position: 'Software Developement Engineer',
+            status: 'Applied',
+            jobID: '89624',
+            location: 'Bposton, MA',
+            time: '2022-01-12',
+            _cellProps: { id: { scope: 'row' } },
+          },
+          {
+            company: 'Google',
+            position: 'Software Developement Engineer',
+            status: 'Applied',
+            jobID: '89624',
+            location: 'Bposton, MA',
+            time: '2022-01-12',
+            _cellProps: { id: { scope: 'row' } },
+          },
+        ];
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>

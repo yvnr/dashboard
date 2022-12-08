@@ -1,11 +1,13 @@
 <template>
-  <div class="app">
-    <LeftNavigationBar />
-    <div class="container-fluid">
-      <HeaderComponent></HeaderComponent>
-      <router-view />
-      <FooterComponent />
+  <div>
+    <HeaderComponent></HeaderComponent>
+    <div class="app">
+      <LeftNavigationBar />
+      <div class="container-fluid">
+        <router-view />
+      </div>
     </div>
+  <FooterComponent />
   </div>
 </template>
 
@@ -61,7 +63,7 @@ button {
   display: flex;
 
   main {
-    flex: 1 1 0;
+    flex: 1 1 0%;
     padding: 2rem;
 
     @media (max-width: 1024px) {

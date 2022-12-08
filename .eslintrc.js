@@ -19,5 +19,6 @@ module.exports = {
     'no-return-assign': 'off',
     'no-sequences': 'off',
     'no-param-reassign': 'off',
+    'no-underscore-dangle': 'off',
   },
 };

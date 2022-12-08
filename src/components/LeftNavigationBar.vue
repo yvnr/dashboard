@@ -51,8 +51,9 @@ aside {
 
   width: calc(2rem + 32px); //32 corresponds to icons size
   overflow: hidden;
-  min-height: 100vh;
+  min-height: 90vh;
   padding: 1rem;
+  margin-left: 0%;
 
   transition: 0.2s ease-in-out;
 
