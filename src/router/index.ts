@@ -1,3 +1,8 @@
+/** This file handles the routing for entire application
+* When a user tries to access a particluar page if authorized lands on the page
+* else redirected to login page
+*/
+
 import { createRouter, createWebHistory } from 'vue-router';
 import store from '../store';
 import Applications from '../views/ApplicationsView.vue';
