@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import store from '../store';
 import Applications from '../views/ApplicationsView.vue';
 
 const router = createRouter({
@@ -27,6 +28,19 @@ const router = createRouter({
       component: () => import(/* webpackChunkName: "about" */ '../views/LoginView.vue'),
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  if (store?.state?.sessionToken) {
+    if (to.path === '/register' || to.path === '/login') {
+      return next({ path: '/' });
+    }
+    return next();
+  }
+  if (to.path === '/register' || to.path === '/login') {
+    return next();
+  }
+  return next({ path: '/login' });
 });
 
 export default router;
