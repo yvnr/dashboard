@@ -11,12 +11,12 @@ interface LoginState {
 }
 
 interface UserState {
-  name?: string;
-  email?: string;
-  univName?: string;
-  uid?: string;
-  univId?: string;
-  sessionToken?: string;
+  name: string | null;
+  email: string | null;
+  univName: string | null;
+  uid: string | null;
+  univId: string | null;
+  sessionToken: string | null;
 }
 
 interface ErrorMessage {

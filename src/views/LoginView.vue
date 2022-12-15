@@ -1,46 +1,78 @@
 <template>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
   <div class="container">
-<form @submit="login">
-  <label for="email"><b>Email</b>
-    <input type="text" v-model="email" name="email" id="email" placeholder="Enter email" required/>
-  </label>
-  <label for="password"><b>Password</b>
-    <input type="password" v-model="password" name="password" id="password" placeholder="Enter Password" required/>
-  </label>
-  <button type="submit" class="registerbtn">Login</button>
-<div class="container signin">
-  <p>No account? <a href="#">Create one</a>.</p>
-</div>
-</form>
-</div>
+    <form @submit.stop.prevent="login">
+      <label for="email"><b>Email</b>
+        <input type="text" v-model="email" name="email" id="email" placeholder="Enter email" :disabled="isDisabled" required/>
+      </label>
+      <label for="password"><b>Password</b>
+        <input type="password" v-model="password" name="password" id="password" placeholder="Enter Password" :disabled="isDisabled" required/>
+      </label>
+      <button type="submit" class="loginbtn" :disabled="isDisabled">{{btnTxt}}
+        <i :class="{'fa-spin fa fa-refresh' : isDisabled}"></i>
+      </button>
+      <div class="error" v-for="error in errors" :key="error" >{{error}}</div>
+      <div class="register">
+        <div>No account? <a href="/register">Create one</a></div>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import store from '../store';
 import { auth, signInWithEmailAndPassword } from '../store/helpers/firebase_auth';
+
+// eslint-disable-next-line no-shadow
+enum ButtonText {
+    'Login' = 'Login',
+    'LoggingIn' ='Logging in'
+}
 
 export default defineComponent({
   name: 'loginView',
   setup() {
     const email = ref('');
     const password = ref('');
-    const error = ref('');
-
-    const store = useStore();
+    const errors = ref([] as string[]);
+    const isDisabled = ref(false);
+    const btnTxt = ref(ButtonText.Login);
     const router = useRouter();
+
+    function validateForm() {
+      const errorMessage: string[] = [];
+      if (!email.value || !email.value.includes('@')) {
+        errorMessage.push('Email is invalid');
+      }
+
+      if (!password.value || password.value.length < 8 || password.value.length > 50) {
+        errorMessage.push('Please enter password with 8-50 characters');
+      }
+      return errorMessage;
+    }
     async function login() {
+      isDisabled.value = true;
+      btnTxt.value = ButtonText.LoggingIn;
+      errors.value = validateForm();
+      if (errors.value.length) {
+        isDisabled.value = false;
+        btnTxt.value = ButtonText.Login;
+        return;
+      }
       try {
         const response = await signInWithEmailAndPassword(auth, email.value, password.value);
-        store.dispatch('populateUser', response);
+        await store.dispatch('createSession', response);
         router.push('/');
       } catch (err: any) {
-        error.value = err.message;
+        btnTxt.value = ButtonText.Login;
+        errors.value.push('Invalid credentials. Please try again');
+        isDisabled.value = false;
       }
     }
     return {
-      login, email, password, error,
+      login, email, password, errors, isDisabled, btnTxt,
     };
   },
 });
@@ -58,8 +90,21 @@ body {
 
 /* Add padding to containers */
 .container {
-  padding: 16px;
+  padding: 30px;
   background-color: white;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  padding: 20px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+form{
+  display: flex;
+  flex-direction: column;
 }
 
 label{
@@ -88,18 +133,21 @@ hr {
 }
 
 /* Set a style for the submit button */
-.registerbtn {
+.loginbtn {
   background-color: #04AA6D;
   color: white;
   padding: 16px 20px;
   margin: 8px 0;
   border: none;
   cursor: pointer;
-  width: 100%;
   opacity: 0.9;
 }
 
-.registerbtn:hover {
+.loginbtn :disabled{
+  background-color: #b9c1be;
+}
+
+.loginbtn:hover {
   opacity: 1;
 }
 
@@ -109,8 +157,12 @@ a {
 }
 
 /* Set a grey background color and center the text of the "sign in" section */
-.signin {
-  background-color: #f1f1f1;
+.register {
   text-align: center;
+}
+
+.error {
+  color: crimson;
+  font-size: 12px;
 }
 </style>
