@@ -4,6 +4,7 @@
     <FilterForCompany
       @filtered-on-company="setSearchCriteria"
     ></FilterForCompany>
+    <AddInterviewExperienceModal :displayAddInterviewExperience="displayAddInterviewExperience"></AddInterviewExperienceModal>
     <ExperiencesList :experiences="experiences"></ExperiencesList>
   </main>
 </template>
@@ -12,17 +13,20 @@
 import axios from 'axios';
 import FilterForCompany from '../components/FilterForCompany.vue';
 import ExperiencesList from '../components/ExperiencesList.vue';
+import AddInterviewExperienceModal from '../components/AddInterviewExperienceModal.vue';
 
 export default {
   name: 'InterviewExperiences',
   components: {
     FilterForCompany,
     ExperiencesList,
+    AddInterviewExperienceModal,
   },
   data() {
     return {
       searchCriteria: {},
       experiences: [],
+      displayAddInterviewExperience: false,
     };
   },
   created() {

@@ -1,12 +1,7 @@
 <template>
   <main id="applications">
     <AggregateValueList :aggregateValues="aggregateValues"></AggregateValueList>
-    <DisplayAddJobApplicationForm :displayToggleButton="!showAddJobApplication"
-      @toggle-add-job-application-form="toggleAddJobAppliation"
-    ></DisplayAddJobApplicationForm>
-    <div v-show="showAddJobApplication">
-      <AddJobApplication @toggle-add-job-application-form="toggleAddJobAppliation"></AddJobApplication>
-    </div>
+    <AddJobApplicationModal />
     <JobsApplied></JobsApplied>
   </main>
 </template>
@@ -15,16 +10,14 @@
 import '@coreui/coreui/dist/css/coreui.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AggregateValueList from '../components/AggregateValueList.vue';
-import AddJobApplication from '../components/AddJobApplication.vue';
-import DisplayAddJobApplicationForm from '../components/ToggleAddJobApplicationForm.vue';
 import JobsApplied from '../components/JobsApplied.vue';
+import AddJobApplicationModal from '../components/AddJobApplicationModal.vue';
 
 export default {
   name: 'ApplicationsView',
   components: {
     AggregateValueList,
-    AddJobApplication,
-    DisplayAddJobApplicationForm,
+    AddJobApplicationModal,
     JobsApplied,
   },
   data() {

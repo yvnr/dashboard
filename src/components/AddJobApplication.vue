@@ -39,17 +39,39 @@
       </select>
       </label>
     </div>
-    <input type="submit" value="Add" class="submit" />
-    <input type="button" value="Close" class="button"  @click="onClick()"/>
+    <CButton type="submit" class="button">Submit</CButton>
   </form>
  </div>
 </template>
 
 <script>
 import axios from 'axios';
+import { CButton } from '@coreui/vue';
 
 export default {
   name: 'AddJobApplication',
+  components: {
+    CButton,
+  },
+  props: {
+    application: {
+      default() {
+        return {
+          company: '',
+          position: '',
+          duration: '',
+          jobID: '',
+          location: '',
+          status: '',
+        };
+      },
+      type: Object,
+    },
+    update: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       company: '',
@@ -59,6 +81,14 @@ export default {
       location: '',
       status: '',
     };
+  },
+  created() {
+    this.company = this.application.company;
+    this.position = this.application.position;
+    this.duration = this.application.duration;
+    this.jobID = this.application.jobID;
+    this.location = this.application.location;
+    this.status = this.application.status;
   },
   methods: {
     async onSubmit(e) {
@@ -78,22 +108,32 @@ export default {
       };
       console.log(application);
       try {
-        // const res = await axios.post('http://localhost:3000/items', application);
+        if (this.update) {
+          // const res = await axios.post('http://localhost:3000/items', application);  //Update Call
+        } else {
+          // const res = await axios.post('http://localhost:3000/items', application);  //Post Call
+        }
         const res = {};
         console.log(res);
         // this.items = [res.data, ...this.items];
       } catch (error) {
         console.log(error);
       }
-      this.company = '';
-      this.position = '';
-      this.duration = '';
-      this.jobID = '';
-      this.location = '';
-      this.status = '';
-    },
-    onClick() {
-      this.$emit('toggle-add-job-application-form');
+      if (this.update) {
+        alert(
+          'Your Update Has Been Recorded\nIf do not choose to make furthre changes\nPlease close the form.',
+        );
+      } else {
+        alert(
+          'Your Application Has Been Added\nIf do not choose to add more applications\nPlease close the form.',
+        );
+        this.company = '';
+        this.position = '';
+        this.duration = '';
+        this.jobID = '';
+        this.location = '';
+        this.status = '';
+      }
     },
     validationForEmptyValues() {
       if (!this.company) {
@@ -127,15 +167,9 @@ export default {
 </script>
 
 <style scoped >
-.submit {
-  padding: 3px 7px;
-}
-
 .button {
-  padding: 3px 7px;
-  align-items: center;
-  /* border-style :groove; */
-  margin-left: 1rem;
+  background-color: var(--light-grey);
+  border-style: groove;
 }
 
 .add-form {
