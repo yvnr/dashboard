@@ -1,7 +1,9 @@
 <template>
   <div class="container-fluid">
     <table v-if="filteredData.length" class="container-fluid">
-    <caption style="caption-side:bottom text-align:left">List of Jobs Applied</caption>
+      <caption style="caption-side:bottom text-align:left">
+        List of Jobs Applied
+      </caption>
       <thead>
         <tr>
           <th
@@ -91,17 +93,37 @@ export default {
   },
   data() {
     return {
+      /**
+       * Table column headers.
+       */
       gridKeys: ['company', 'position', 'status', 'jobID', 'location', 'time'],
+      /**
+       * Table rows.
+       */
       gridData: [],
+      /**
+       * Column on which the table is currently sorted.
+       */
       sortKey: '',
+      /**
+       * Sorted order of the data in the table.
+       */
       sortOrders: {},
+      /**
+       * row data being updated by the user.
+       */
       applicationSelectedToEdit: null,
     };
   },
   created() {
     this.fetch();
+    this.computeSortedOrder();
   },
   computed: {
+    /**
+     * Gets called when the user click on the sort arrow.
+     * @return sorted table data
+     */
     filteredData() {
       const { sortKey } = this;
       const order = this.sortOrders[sortKey] || 1;
@@ -118,6 +140,10 @@ export default {
     },
   },
   methods: {
+    /**
+     * Gets called when the component is created.
+     * Makes an API call to fetch the data.
+     */
     async fetch() {
       try {
         // const res = await axios.get('http://localhost:3000/items');
@@ -155,17 +181,36 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    /**
+     * Gets called when the component is created.
+     * Computes ascending order of each column.
+     */
+    computeSortedOrder() {
       this.sortOrders = this.gridKeys.reduce((o, key) => ((o[key] = 1), o), {});
     },
+    /**
+     * Sort the table data based on given column name.
+     * @param key column name on which the table is sorted
+     */
     sortBy(key) {
       this.sortKey = key;
       this.sortOrders[key] *= -1;
     },
+    /**
+     * Capitalizes the given string.
+     * @param str string to be capitalized
+     * @return capitilazied string
+     */
     capitalize(str) {
       return str.charAt(0).toUpperCase() + str.slice(1);
     },
+    /**
+     * Store the data of application selected by user to update.
+     * @param application application selected by user
+     */
     editApplicationData(application) {
-      console.log(application);
+      // console.log(application);
       this.applicationSelectedToEdit = application;
     },
   },

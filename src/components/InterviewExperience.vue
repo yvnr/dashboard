@@ -30,6 +30,9 @@ import {
 export default {
   name: 'InterviewExperience',
   props: {
+    /**
+     * User Experience data.
+     */
     experience: Object,
   },
   components: {

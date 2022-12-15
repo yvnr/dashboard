@@ -4,14 +4,15 @@
       <CContainer fluid>
         <CRow class="justify-content-start form-control">
           <CCol xs="6" md="6">
-            <label for="company"><b>Company: </b>
-            <input
-              type="text"
-              v-model="company"
-              name="company"
-              id = "company"
-              placeholder="Search for Company"
-            />
+            <label for="company"
+              ><b>Company: </b>
+              <input
+                type="text"
+                v-model="company"
+                name="company"
+                id="company"
+                placeholder="Search for Company"
+              />
             </label>
           </CCol>
           <CCol xs="2" md="1">
@@ -35,31 +36,39 @@ export default {
   components: { CContainer, CRow, CCol },
   data() {
     return {
+      /**
+       * copmany name entered by user to filter data.
+       */
       company: '',
     };
   },
   methods: {
+    /**
+     * Gets called when user enters a company name.
+     * triggers event to filter the table data
+     */
     onSubmit(e) {
       e.preventDefault();
-
       // Removed validation to search for all entries
       // if (this.validationForEmptyValues()) {
       //   return;
       // }
-
       const searchCriteria = {
         company: this.company,
       };
-
       this.$emit('filtered-on-company', searchCriteria);
     },
-    validationForEmptyValues() {
-      if (!this.company) {
-        alert('Please enter the company you want to search for');
-        return true;
-      }
-      return false;
-    },
+    // /**
+    //  * validates form fields for empty values.
+    //  * @return true if all form fields are valid else false
+    //  */
+    // validationForEmptyValues() {
+    //   if (!this.company) {
+    //     alert('Please enter the company you want to search for');
+    //     return true;
+    //   }
+    //   return false;
+    // },
   },
 };
 </script>

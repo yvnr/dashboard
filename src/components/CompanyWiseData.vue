@@ -49,13 +49,13 @@
     "
   >
     <CModalHeader>
-      <CModalTitle>
-        Role Wise Data for:
-      </CModalTitle>
+      <CModalTitle> Role Wise Data for: </CModalTitle>
     </CModalHeader>
     <CModalBody>
       <h1>{{ this.currentSelectedCompanyForRoleWiseData }}</h1>
-      <RoleWiseData :company="currentSelectedCompanyForRoleWiseData"></RoleWiseData>
+      <RoleWiseData
+        :company="currentSelectedCompanyForRoleWiseData"
+      ></RoleWiseData>
     </CModalBody>
     <CModalFooter>
       <CButton
@@ -95,10 +95,16 @@ export default {
     RoleWiseData,
   },
   props: {
+    /**
+     * copmany name entered by user to filter data.
+     */
     filterKey: Object,
   },
   data() {
     return {
+      /**
+       * Table column headers.
+       */
       gridColumns: [
         'Company',
         'Applied',
@@ -107,86 +113,33 @@ export default {
         'Accepted',
         'Rejected',
       ],
+      /**
+       * Table rows.
+       */
       gridData: [],
+      /**
+       * Column on which the table is currently sorted.
+       */
       sortKey: '',
+      /**
+       * Sorted order of the data in the table.
+       */
       sortOrders: {},
+      /**
+       * company name selected by the user for role wise data.
+       */
       currentSelectedCompanyForRoleWiseData: null,
     };
   },
   created() {
-    //   TODO Need to fetch this data from API
-    this.gridData = [
-      {
-        Company: 'Amazon',
-        Applied: '100',
-        Assessment: '40',
-        Interview: '20',
-        Accepted: '5',
-        Rejected: '25',
-      },
-      {
-        Company: 'Meta',
-        Applied: '10',
-        Assessment: '40',
-        Interview: '20',
-        Accepted: '5',
-        Rejected: '25',
-      },
-      {
-        Company: 'Google',
-        Applied: '100',
-        Assessment: '40',
-        Interview: '20',
-        Accepted: '5',
-        Rejected: '25',
-      },
-      {
-        Company: 'Netflix',
-        Applied: '100',
-        Assessment: '40',
-        Interview: '20',
-        Accepted: '5',
-        Rejected: '25',
-      },
-      {
-        Company: 'Salesforce',
-        Applied: '100',
-        Assessment: '40',
-        Interview: '20',
-        Accepted: '5',
-        Rejected: '25',
-      },
-      {
-        Company: 'Snowflake',
-        Applied: '100',
-        Assessment: '40',
-        Interview: '20',
-        Accepted: '5',
-        Rejected: '25',
-      },
-      {
-        Company: 'HRT',
-        Applied: '100',
-        Assessment: '40',
-        Interview: '20',
-        Accepted: '5',
-        Rejected: '25',
-      },
-      {
-        Company: 'TuSimple',
-        Applied: '100',
-        Assessment: '40',
-        Interview: '20',
-        Accepted: '5',
-        Rejected: '25',
-      },
-    ];
-    this.sortOrders = this.gridColumns.reduce(
-      (o, key) => ((o[key] = 1), o),
-      {},
-    );
+    this.fetch();
+    this.computeSortedOrder();
   },
   computed: {
+    /**
+     * Gets called when the user click on the sort arrow.
+     * @return sorted table data
+     */
     filteredData() {
       const { sortKey } = this;
       const filterKey = this.filterKey.company && this.filterKey.company.toLowerCase();
@@ -209,14 +162,110 @@ export default {
     },
   },
   methods: {
+    /**
+     * Gets called when the component is created.
+     * Makes an API call to fetch the data.
+     */
+    async fetch() {
+      //   TODO Need to fetch this data from API
+      this.gridData = [
+        {
+          Company: 'Amazon',
+          Applied: '100',
+          Assessment: '40',
+          Interview: '20',
+          Accepted: '5',
+          Rejected: '25',
+        },
+        {
+          Company: 'Meta',
+          Applied: '10',
+          Assessment: '40',
+          Interview: '20',
+          Accepted: '5',
+          Rejected: '25',
+        },
+        {
+          Company: 'Google',
+          Applied: '100',
+          Assessment: '40',
+          Interview: '20',
+          Accepted: '5',
+          Rejected: '25',
+        },
+        {
+          Company: 'Netflix',
+          Applied: '100',
+          Assessment: '40',
+          Interview: '20',
+          Accepted: '5',
+          Rejected: '25',
+        },
+        {
+          Company: 'Salesforce',
+          Applied: '100',
+          Assessment: '40',
+          Interview: '20',
+          Accepted: '5',
+          Rejected: '25',
+        },
+        {
+          Company: 'Snowflake',
+          Applied: '100',
+          Assessment: '40',
+          Interview: '20',
+          Accepted: '5',
+          Rejected: '25',
+        },
+        {
+          Company: 'HRT',
+          Applied: '100',
+          Assessment: '40',
+          Interview: '20',
+          Accepted: '5',
+          Rejected: '25',
+        },
+        {
+          Company: 'TuSimple',
+          Applied: '100',
+          Assessment: '40',
+          Interview: '20',
+          Accepted: '5',
+          Rejected: '25',
+        },
+      ];
+    },
+    /**
+     * Gets called when the component is created.
+     * Computes ascending order of each column.
+     */
+    computeSortedOrder() {
+      this.sortOrders = this.gridColumns.reduce(
+        (o, key) => ((o[key] = 1), o),
+        {},
+      );
+    },
+    /**
+     * Gets called when user selects a company to check role wise data.
+     * @param company name of company selected
+     */
     displayRoleWiseData(company) {
       console.log(company);
       this.currentSelectedCompanyForRoleWiseData = company;
     },
+    /**
+     * Sort the table data based on given column name.
+     * @param key column name on which the table is sorted
+     */
     sortBy(key) {
       this.sortKey = key;
       this.sortOrders[key] *= -1;
     },
+    /**
+     * Capitalizes the given string.
+     * @param str string to be capitalized
+     * @return capitilazied string
+     */
     capitalize(str) {
       return str.charAt(0).toUpperCase() + str.slice(1);
     },

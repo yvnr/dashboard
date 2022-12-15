@@ -1,0 +1,11 @@
+{
+    "urls": {
+        "record": {
+            "domain": "http://localhost:"
+        },
+        "tracker": {
+            "domain": "http://localhost:8080/api/tracker",
+            "post_applications": "/application"
+        }
+    }
+}

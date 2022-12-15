@@ -55,10 +55,17 @@ export default {
   },
   data() {
     return {
+      /**
+       * Flag to control the Form visibility.
+       */
       visibleVerticallyCenteredDemo: false,
     };
   },
   methods: {
+    /**
+     * Gets called when the user click application button.
+     * toggles the interview experience form display
+     */
     onClick() {
       this.visibleVerticallyCenteredDemo = true;
       this.$emit('reload-experiences');
@@ -70,6 +77,6 @@ export default {
 <style lang="scss" scoped>
 .button {
   background-color: var(--light-grey);
-  border-style :groove;
+  border-style: groove;
 }
 </style>

@@ -36,6 +36,10 @@ export default defineComponent({
     const isDisabled = ref(false);
     name.value = store.state.name ?? '';
 
+    /**
+     * Gets called when user clicks logout.
+     * logs out the user
+     */
     async function logout() {
       isDisabled.value = true;
       btnTxt.value = ButtonText.LoggingOut;

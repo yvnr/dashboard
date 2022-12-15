@@ -36,10 +36,16 @@
 export default {
   name: 'RoleWiseData',
   props: {
+    /**
+     * The name of the company.
+     */
     company: String,
   },
   data() {
     return {
+      /**
+       * Table column headers.
+       */
       gridColumns: [
         'Position',
         'Applied',
@@ -48,85 +54,29 @@ export default {
         'Accepted',
         'Rejected',
       ],
+      /**
+       * Table rows.
+       */
       gridData: [],
+      /**
+       * Column on which the table is currently sorted.
+       */
       sortKey: '',
+      /**
+       * Sorted order of the data in the table.
+       */
       sortOrders: {},
     };
   },
   created() {
-    //   TODO Need to fetch this data from API
-    this.gridData = [
-      {
-        Position: 'SDE-1',
-        Applied: '100',
-        Assessment: '40',
-        Interview: '20',
-        Accepted: '5',
-        Rejected: '25',
-      },
-      {
-        Position: 'SDE-11',
-        Applied: '10',
-        Assessment: '40',
-        Interview: '20',
-        Accepted: '5',
-        Rejected: '25',
-      },
-      {
-        Position: 'SDE-111',
-        Applied: '100',
-        Assessment: '40',
-        Interview: '20',
-        Accepted: '5',
-        Rejected: '25',
-      },
-      {
-        Position: 'Program Analyst',
-        Applied: '100',
-        Assessment: '40',
-        Interview: '20',
-        Accepted: '5',
-        Rejected: '25',
-      },
-      {
-        Position: 'Business Intelligence Manager',
-        Applied: '100',
-        Assessment: '40',
-        Interview: '20',
-        Accepted: '5',
-        Rejected: '25',
-      },
-      {
-        Position: 'Operations Manager',
-        Applied: '100',
-        Assessment: '40',
-        Interview: '20',
-        Accepted: '5',
-        Rejected: '25',
-      },
-      {
-        Position: 'HR Manager',
-        Applied: '100',
-        Assessment: '40',
-        Interview: '20',
-        Accepted: '5',
-        Rejected: '25',
-      },
-      {
-        Position: 'Diector',
-        Applied: '100',
-        Assessment: '40',
-        Interview: '20',
-        Accepted: '5',
-        Rejected: '25',
-      },
-    ];
-    this.sortOrders = this.gridColumns.reduce(
-      (o, key) => ((o[key] = 1), o),
-      {},
-    );
+    this.fetch();
+    this.computeSortedOrder();
   },
   computed: {
+    /**
+     * Gets called when the user click on the sort arrow.
+     * @return sorted table data
+     */
     filteredData() {
       const { sortKey } = this;
       const order = this.sortOrders[sortKey] || 1;
@@ -143,10 +93,102 @@ export default {
     },
   },
   methods: {
+    /**
+     * Gets called when the component is created.
+     * Makes an API call to fetch the data
+     */
+    async fetch() {
+      //   TODO Need to fetch this data from API
+      this.gridData = [
+        {
+          Position: 'SDE-1',
+          Applied: '100',
+          Assessment: '40',
+          Interview: '20',
+          Accepted: '5',
+          Rejected: '25',
+        },
+        {
+          Position: 'SDE-11',
+          Applied: '10',
+          Assessment: '40',
+          Interview: '20',
+          Accepted: '5',
+          Rejected: '25',
+        },
+        {
+          Position: 'SDE-111',
+          Applied: '100',
+          Assessment: '40',
+          Interview: '20',
+          Accepted: '5',
+          Rejected: '25',
+        },
+        {
+          Position: 'Program Analyst',
+          Applied: '100',
+          Assessment: '40',
+          Interview: '20',
+          Accepted: '5',
+          Rejected: '25',
+        },
+        {
+          Position: 'Business Intelligence Manager',
+          Applied: '100',
+          Assessment: '40',
+          Interview: '20',
+          Accepted: '5',
+          Rejected: '25',
+        },
+        {
+          Position: 'Operations Manager',
+          Applied: '100',
+          Assessment: '40',
+          Interview: '20',
+          Accepted: '5',
+          Rejected: '25',
+        },
+        {
+          Position: 'HR Manager',
+          Applied: '100',
+          Assessment: '40',
+          Interview: '20',
+          Accepted: '5',
+          Rejected: '25',
+        },
+        {
+          Position: 'Diector',
+          Applied: '100',
+          Assessment: '40',
+          Interview: '20',
+          Accepted: '5',
+          Rejected: '25',
+        },
+      ];
+    },
+    /**
+     * Gets called when the component is created.
+     * Computes ascending order of each column.
+     */
+    computeSortedOrder() {
+      this.sortOrders = this.gridColumns.reduce(
+        (o, key) => ((o[key] = 1), o),
+        {},
+      );
+    },
+    /**
+     * Sort the table data based on given column name.
+     * @param key column name on which the table is sorted
+     */
     sortBy(key) {
       this.sortKey = key;
       this.sortOrders[key] *= -1;
     },
+    /**
+     * Capitalizes the given string.
+     * @param str string to be capitalized
+     * @return capitilazied string
+     */
     capitalize(str) {
       return str.charAt(0).toUpperCase() + str.slice(1);
     },

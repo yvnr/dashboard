@@ -55,10 +55,17 @@ export default {
   },
   data() {
     return {
+      /**
+       * Flag to control the Form visibility.
+       */
       visibleVerticallyCenteredDemo: false,
     };
   },
   methods: {
+    /**
+     * Gets called when the user click application button.
+     * toggles the application form display
+     */
     onClick() {
       this.visibleVerticallyCenteredDemo = true;
     },

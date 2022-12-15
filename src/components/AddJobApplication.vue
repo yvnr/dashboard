@@ -12,11 +12,11 @@
       <input type="text" v-model="position" name="position" id="position" placeholder="Add Position"/>
       </label>
     </div>
-    <div class="form-control">
+    <!-- <div class="form-control">
       <label for="duration">Duration
       <input type="text" v-model="duration" name="duration" id="duration" placeholder="Add Duration"/>
       </label>
-    </div>
+    </div> -->
     <div class="form-control">
       <label for="jobID">Job ID
       <input type="text" v-model="jobID" name="jobID" id="jobID" placeholder="Add Job ID"/>
@@ -47,6 +47,8 @@
 <script>
 import axios from 'axios';
 import { CButton } from '@coreui/vue';
+import { urls } from '../config.json';
+import store from '../store';
 
 export default {
   name: 'AddJobApplication',
@@ -54,12 +56,15 @@ export default {
     CButton,
   },
   props: {
+    /**
+     * Default values of application form fields.
+     */
     application: {
       default() {
         return {
           company: '',
           position: '',
-          duration: '',
+          // duration: '',
           jobID: '',
           location: '',
           status: '',
@@ -67,6 +72,9 @@ export default {
       },
       type: Object,
     },
+    /**
+     * Stores whether Update/Add form.
+     */
     update: {
       type: Boolean,
       default: false,
@@ -74,23 +82,45 @@ export default {
   },
   data() {
     return {
+      /**
+       * company name.
+       */
       company: '',
+      /**
+       * position applied for.
+       */
       position: '',
-      duration: '',
+      /**
+       * duration of role.
+       */
+      // duration: '',
+      /**
+       * jobID of role.
+       */
       jobID: '',
+      /**
+       * company location.
+       */
       location: '',
+      /**
+       * application status.
+       */
       status: '',
     };
   },
   created() {
     this.company = this.application.company;
     this.position = this.application.position;
-    this.duration = this.application.duration;
+    // this.duration = this.application.duration;
     this.jobID = this.application.jobID;
     this.location = this.application.location;
     this.status = this.application.status;
   },
   methods: {
+    /**
+     * Gets called when user adds application.
+     * makes a POST/PUT API call to persit applicaiton data
+     */
     async onSubmit(e) {
       e.preventDefault();
 
@@ -101,40 +131,53 @@ export default {
       const application = {
         company: this.company,
         position: this.position,
-        duration: this.duration,
+        // duration: this.duration,
         jobID: this.jobID,
         location: this.location,
         status: this.status,
+        time: '2022-12-24',
       };
       console.log(application);
       try {
         if (this.update) {
-          // const res = await axios.post('http://localhost:3000/items', application);  //Update Call
+          const res = await axios.post(
+            'http://localhost:3000/items',
+            application,
+          );
+          alert(
+            'Your Update Has Been Recorded\nIf you do not choose to make furthre changes\nPlease close the form.',
+          );
         } else {
-          // const res = await axios.post('http://localhost:3000/items', application);  //Post Call
+          const res = await axios.post(
+            urls.tracker.domain + urls.tracker.domain.post_applications,
+            application,
+            {
+              headers: {
+                'x-uid': 123,
+                'x-univ-id': 123,
+              },
+            },
+          );
+          console.log(res);
+          alert(
+            'Your Application Has Been Added\nIf you do not choose to add more applications\nPlease close the form.',
+          );
+          this.company = '';
+          this.position = '';
+          // this.duration = '';
+          this.jobID = '';
+          this.location = '';
+          this.status = '';
         }
-        const res = {};
-        console.log(res);
         // this.items = [res.data, ...this.items];
       } catch (error) {
         console.log(error);
       }
-      if (this.update) {
-        alert(
-          'Your Update Has Been Recorded\nIf do not choose to make furthre changes\nPlease close the form.',
-        );
-      } else {
-        alert(
-          'Your Application Has Been Added\nIf do not choose to add more applications\nPlease close the form.',
-        );
-        this.company = '';
-        this.position = '';
-        this.duration = '';
-        this.jobID = '';
-        this.location = '';
-        this.status = '';
-      }
     },
+    /**
+     * validates form fields for empty values.
+     * @return true if all form fields are valid else false
+     */
     validationForEmptyValues() {
       if (!this.company) {
         alert('Please enter the company you applied for');
@@ -144,10 +187,10 @@ export default {
         alert('Please enter position you applied for');
         return true;
       }
-      if (!this.duration) {
-        alert('Please enter duration you applied for');
-        return true;
-      }
+      // if (!this.duration) {
+      //   alert('Please enter duration you applied for');
+      //   return true;
+      // }
       if (!this.jobID) {
         alert('Please enter Job ID');
         return true;

@@ -10,36 +10,32 @@
       <span class="material-symbols-outlined">
         {{ selectIcon(aggregateValue.text) }}
       </span>
-      <!-- <CIcon :icon="selectIcon(aggregateValue.text)" size="xxl" height="36" /> -->
     </template>
   </CWidgetStatsF>
 </template>
 
 <script>
 import { CWidgetStatsF } from '@coreui/vue';
-// import { CIcon } from '@coreui/icons-vue';
-import * as icon from '@coreui/icons';
 
 export default {
   name: 'AggregateValue',
   props: {
+    /**
+     * Value of the current aggregate metric.
+     */
     aggregateValue: Object,
   },
   components: {
-    // CIcon,
     CWidgetStatsF,
   },
-  setup() {
-    return {
-      icon,
-    };
-  },
   methods: {
+    /**
+     * Gets called the dom is loaded
+     * selects an material-ui-icon based on input text
+     * @param text aggregate value type
+     * @return material-ui-icon symbol
+     */
     selectIcon(text) {
-      // if (text === 'Offers') {
-      //   return icon.cilCheck;
-      // }
-      // return icon.cilSettings;
       if (text === 'Offers') {
         return 'check_circle';
       }
@@ -48,6 +44,12 @@ export default {
       }
       return 'functions';
     },
+    /**
+     * Gets called the dom is loaded
+     * selects an color based on input text
+     * @param text aggregate value type
+     * @return color value
+     */
     selectColor(text) {
       if (text === 'Offers') {
         return 'success';

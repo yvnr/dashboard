@@ -38,13 +38,29 @@ export default {
   },
   data() {
     return {
+      /**
+       * company name.
+       */
       company: '',
+      /**
+       * position applied for.
+       */
       position: '',
+      /**
+       * company location.
+       */
       location: '',
+      /**
+       * user note.
+       */
       note: '',
     };
   },
   methods: {
+    /**
+     * Gets called when user submits their experience.
+     * makes a POST/PUT API call to persit experience data
+     */
     async onSubmit(e) {
       e.preventDefault();
 
@@ -72,6 +88,10 @@ export default {
       this.location = '';
       this.note = '';
     },
+    /**
+     * validates form fields for empty values.
+     * @return true if all form fields are valid else false
+     */
     validationForEmptyValues() {
       if (!this.company) {
         alert('Please enter the company you applied for');

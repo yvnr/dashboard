@@ -30,10 +30,16 @@
 export default {
   data() {
     return {
+      /**
+       * Flag to control the SideBar width.
+       */
       sideBarShouldBeVisible: true,
     };
   },
   methods: {
+    /**
+     * Gets called used clicks on the toggle sidebar icon.
+     */
     ToggleMenu() {
       this.sideBarShouldBeVisible = !this.sideBarShouldBeVisible;
     },
