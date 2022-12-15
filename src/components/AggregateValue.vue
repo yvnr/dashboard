@@ -6,15 +6,18 @@
     <template #value>
       {{ aggregateValue.value }}
     </template>
-    <template #icon
-      ><CIcon :icon="selectIcon(aggregateValue.text)" size="xxl" height="36" />
+    <template #icon>
+      <span class="material-symbols-outlined">
+        {{ selectIcon(aggregateValue.text) }}
+      </span>
+      <!-- <CIcon :icon="selectIcon(aggregateValue.text)" size="xxl" height="36" /> -->
     </template>
   </CWidgetStatsF>
 </template>
 
 <script>
 import { CWidgetStatsF } from '@coreui/vue';
-import { CIcon } from '@coreui/icons-vue';
+// import { CIcon } from '@coreui/icons-vue';
 import * as icon from '@coreui/icons';
 
 export default {
@@ -23,7 +26,7 @@ export default {
     aggregateValue: Object,
   },
   components: {
-    CIcon,
+    // CIcon,
     CWidgetStatsF,
   },
   setup() {
@@ -33,15 +36,23 @@ export default {
   },
   methods: {
     selectIcon(text) {
+      // if (text === 'Offers') {
+      //   return icon.cilCheck;
+      // }
+      // return icon.cilSettings;
       if (text === 'Offers') {
-        return icon.cilCheck;
+        return 'check_circle';
       }
-      return icon.cilSettings;
+      if (text === 'Applications In Progress') {
+        return 'pending';
+      }
+      return 'functions';
     },
     selectColor(text) {
       if (text === 'Offers') {
         return 'success';
-      } if (text === 'Applications In Progress') {
+      }
+      if (text === 'Applications In Progress') {
         return 'info';
       }
       return 'primary';
@@ -49,3 +60,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 700, "GRAD" 200, "opsz" 48;
+  padding: 0rem;
+}
+</style>
