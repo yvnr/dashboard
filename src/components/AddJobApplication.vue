@@ -39,17 +39,20 @@
       </select>
       </label>
     </div>
-    <input type="submit" value="Add" class="submit" />
-    <input type="button" value="Close" class="button"  @click="onClick()"/>
+    <CButton type="submit" class="button">Submit</CButton>
   </form>
  </div>
 </template>
 
 <script>
 import axios from 'axios';
+import { CButton } from '@coreui/vue';
 
 export default {
   name: 'AddJobApplication',
+  components: {
+    CButton,
+  },
   data() {
     return {
       company: '',
@@ -92,9 +95,6 @@ export default {
       this.location = '';
       this.status = '';
     },
-    onClick() {
-      this.$emit('toggle-add-job-application-form');
-    },
     validationForEmptyValues() {
       if (!this.company) {
         alert('Please enter the company you applied for');
@@ -127,15 +127,9 @@ export default {
 </script>
 
 <style scoped >
-.submit {
-  padding: 3px 7px;
-}
-
 .button {
-  padding: 3px 7px;
-  align-items: center;
-  /* border-style :groove; */
-  margin-left: 1rem;
+  background-color: var(--light-grey);
+  border-style: groove;
 }
 
 .add-form {

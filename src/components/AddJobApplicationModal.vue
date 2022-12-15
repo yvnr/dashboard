@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid d-flex p-2 justify-content-center">
-    <CButton class="button" @click="onClick()">ADD YOUR EXPERIENCE</CButton>
+    <CButton class="button" @click="onClick()">ADD APPLICATION</CButton>
   </div>
   <CModal
     alignment="center"
@@ -12,10 +12,10 @@
     "
   >
     <CModalHeader>
-      <CModalTitle>Submit Your Experience</CModalTitle>
+      <CModalTitle>Add Your Application</CModalTitle>
     </CModalHeader>
     <CModalBody>
-      <AddInterviewExperience />
+      <AddJobApplication />
     </CModalBody>
     <CModalFooter>
       <CButton
@@ -40,10 +40,10 @@ import {
   CModalBody,
   CModalFooter,
 } from '@coreui/vue';
-import AddInterviewExperience from './AddInterviewExperience.vue';
+import AddJobApplication from './AddJobApplication.vue';
 
 export default {
-  name: 'AddInterviewExperienceModal',
+  name: 'AddJobApplicationModal',
   components: {
     CModal,
     CButton,
@@ -51,7 +51,7 @@ export default {
     CModalTitle,
     CModalBody,
     CModalFooter,
-    AddInterviewExperience,
+    AddJobApplication,
   },
   data() {
     return {
@@ -61,7 +61,7 @@ export default {
   methods: {
     onClick() {
       this.visibleVerticallyCenteredDemo = true;
-      this.$emit('reload-experiences');
+      this.$emit('reload-applications');
     },
   },
 };

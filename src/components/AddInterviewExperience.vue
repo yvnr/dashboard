@@ -19,7 +19,6 @@
     </div>
     <div class="form-control">
       <label for="experience">Experience
-      <!-- <input type="text" v-model="experience" name="experience" id="experience" placeholder="Add Experience"/> -->
       <textarea type="text" v-model="note" name="experience" id="experience" placeholder="Add Experience"></textarea>
       </label>
     </div>
