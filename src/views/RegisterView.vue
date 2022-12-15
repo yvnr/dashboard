@@ -32,9 +32,9 @@
 
 <script lang="ts">
 import { ref, watchEffect } from 'vue';
-import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import store from '../store';
 import { auth, signInWithCustomToken } from '../store/helpers/firebase_auth';
 
 // eslint-disable-next-line no-shadow
@@ -55,7 +55,6 @@ export default {
     const isDisabled = ref(false);
     const btnTxt = ref(ButtonText.SignUp);
 
-    const store = useStore();
     const router = useRouter();
 
     function validateForm() {

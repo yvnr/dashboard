@@ -27,7 +27,7 @@ const store: StoreOptions<UserState> = {
       localStorage.setItem('univId', claims.univId);
       context.commit('updateStore');
     },
-    async deleteSession(context) {
+    async clearSession(context) {
       localStorage.clear();
       context.commit('clearStore');
     },

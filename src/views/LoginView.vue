@@ -22,7 +22,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import store from '../store';
 import { auth, signInWithEmailAndPassword } from '../store/helpers/firebase_auth';
 
 // eslint-disable-next-line no-shadow
@@ -39,8 +39,6 @@ export default defineComponent({
     const errors = ref([] as string[]);
     const isDisabled = ref(false);
     const btnTxt = ref(ButtonText.Login);
-
-    const store = useStore();
     const router = useRouter();
 
     function validateForm() {
