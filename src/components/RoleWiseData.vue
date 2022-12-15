@@ -3,7 +3,7 @@
     <!-- Need to add toggle for this titile also check how to handle prefix search-->
     <h4 v-show="false">Showing Results for:</h4>
     <h3 v-show="false">
-      {{ this.filterKey.company }}
+      {{ this.company }}
     </h3>
     <table v-if="filteredData.length" class="container-fluid">
       <thead>
@@ -22,15 +22,7 @@
       </thead>
       <tbody>
         <tr :key="entry" v-for="entry in filteredData">
-          <td
-            class="hovertext"
-            data-hover="Click Here, to view position wise logistics"
-            @click="displayRoleWiseData(entry['Company'])"
-            @keypress="displayRoleWiseData(entry['Company'])"
-          >
-            <u>{{ entry["Company"] }}</u>
-          </td>
-          <td :key="key" v-for="key in gridColumns.slice(1)">
+          <td :key="key" v-for="key in gridColumns">
             {{ entry[key] }}
           </td>
         </tr>
@@ -38,64 +30,13 @@
     </table>
     <p v-else>No matches found.</p>
   </div>
-  <CModal
-    alignment="center"
-    size="xl"
-    :visible="currentSelectedCompanyForRoleWiseData != null"
-    @close="
-      () => {
-        currentSelectedCompanyForRoleWiseData = null;
-      }
-    "
-  >
-    <CModalHeader>
-      <CModalTitle>
-        Role Wise Data for:
-      </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-      <h1>{{ this.currentSelectedCompanyForRoleWiseData }}</h1>
-      <RoleWiseData :company="currentSelectedCompanyForRoleWiseData"></RoleWiseData>
-    </CModalBody>
-    <CModalFooter>
-      <CButton
-        color="primary  "
-        @click="
-          () => {
-            currentSelectedCompanyForRoleWiseData = null;
-          }
-        "
-      >
-        Close
-      </CButton>
-    </CModalFooter>
-  </CModal>
 </template>
 
 <script>
-import {
-  CModal,
-  CButton,
-  CModalHeader,
-  CModalTitle,
-  CModalBody,
-  CModalFooter,
-} from '@coreui/vue';
-import RoleWiseData from './RoleWiseData.vue';
-
 export default {
-  name: 'CompanyWiseData',
-  components: {
-    CModal,
-    CButton,
-    CModalHeader,
-    CModalTitle,
-    CModalBody,
-    CModalFooter,
-    RoleWiseData,
-  },
+  name: 'RoleWiseData',
   props: {
-    filterKey: Object,
+    company: String,
   },
   data() {
     return {
@@ -103,13 +44,12 @@ export default {
       gridData: [],
       sortKey: '',
       sortOrders: {},
-      currentSelectedCompanyForRoleWiseData: null,
     };
   },
   created() {
     //   TODO Need to fetch this data from API
     this.gridColumns = [
-      'Company',
+      'Position',
       'Applied',
       'Assessment',
       'Interview',
@@ -118,7 +58,7 @@ export default {
     ];
     this.gridData = [
       {
-        Company: 'Amazon',
+        Position: 'SDE-1',
         Applied: '100',
         Assessment: '40',
         Interview: '20',
@@ -126,7 +66,7 @@ export default {
         Rejected: '25',
       },
       {
-        Company: 'Meta',
+        Position: 'SDE-11',
         Applied: '10',
         Assessment: '40',
         Interview: '20',
@@ -134,7 +74,7 @@ export default {
         Rejected: '25',
       },
       {
-        Company: 'Google',
+        Position: 'SDE-111',
         Applied: '100',
         Assessment: '40',
         Interview: '20',
@@ -142,7 +82,7 @@ export default {
         Rejected: '25',
       },
       {
-        Company: 'Netflix',
+        Position: 'Program Analyst',
         Applied: '100',
         Assessment: '40',
         Interview: '20',
@@ -150,7 +90,7 @@ export default {
         Rejected: '25',
       },
       {
-        Company: 'Salesforce',
+        Position: 'Business Intelligence Manager',
         Applied: '100',
         Assessment: '40',
         Interview: '20',
@@ -158,7 +98,7 @@ export default {
         Rejected: '25',
       },
       {
-        Company: 'Snowflake',
+        Position: 'Operations Manager',
         Applied: '100',
         Assessment: '40',
         Interview: '20',
@@ -166,7 +106,7 @@ export default {
         Rejected: '25',
       },
       {
-        Company: 'HRT',
+        Position: 'HR Manager',
         Applied: '100',
         Assessment: '40',
         Interview: '20',
@@ -174,7 +114,7 @@ export default {
         Rejected: '25',
       },
       {
-        Company: 'TuSimple',
+        Position: 'Diector',
         Applied: '100',
         Assessment: '40',
         Interview: '20',
@@ -190,14 +130,8 @@ export default {
   computed: {
     filteredData() {
       const { sortKey } = this;
-      const filterKey = this.filterKey.company && this.filterKey.company.toLowerCase();
       const order = this.sortOrders[sortKey] || 1;
       let data = this.gridData;
-      if (filterKey) {
-        data = data.filter((row) => Object.keys(row).some(
-          (key) => String(row[key]).toLowerCase().indexOf(filterKey) > -1,
-        ));
-      }
       if (sortKey) {
         data = data.slice().sort((a, b) => {
           const x = a[sortKey];
@@ -210,10 +144,6 @@ export default {
     },
   },
   methods: {
-    displayRoleWiseData(company) {
-      console.log(company);
-      this.currentSelectedCompanyForRoleWiseData = company;
-    },
     sortBy(key) {
       this.sortKey = key;
       this.sortOrders[key] *= -1;
@@ -279,32 +209,5 @@ th.active .arrow {
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-top: 4px solid #f1f5f9;
-}
-
-.hovertext {
-  position: relative;
-}
-
-.hovertext:before {
-  content: attr(data-hover);
-  visibility: hidden;
-  opacity: 0;
-  width: max-content;
-  background-color: var(--light-grey);
-  color: var(--dark-alt);
-  text-align: center;
-  border-radius: 5px;
-  padding: 5px 0;
-  /* transition: opacity 1s ease-in-out; */
-
-  position: absolute;
-  z-index: 1;
-  left: 75%;
-  top: 15%;
-}
-
-.hovertext:hover:before {
-  opacity: 1;
-  visibility: visible;
 }
 </style>
