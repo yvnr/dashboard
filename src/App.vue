@@ -2,7 +2,7 @@
   <div>
     <HeaderComponent></HeaderComponent>
     <div class="app">
-      <LeftNavigationBar />
+      <LeftNavigationBar v-if="userAuthenticated"/>
       <div class="container-fluid">
         <router-view />
       </div>
@@ -11,21 +11,30 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import '@coreui/coreui/dist/css/coreui.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { defineComponent, watchEffect, ref } from 'vue';
+import store from './store';
 import LeftNavigationBar from './components/LeftNavigationBar.vue';
 import FooterComponent from './components/FooterComponent.vue';
 import HeaderComponent from './components/HeaderComponent.vue';
 
-export default {
+export default defineComponent({
   name: 'App',
+  setup() {
+    const userAuthenticated = ref(!!store.state.sessionToken);
+    watchEffect(() => {
+      userAuthenticated.value = !!store.state.sessionToken;
+    });
+    return { userAuthenticated };
+  },
   components: {
     LeftNavigationBar,
     FooterComponent,
     HeaderComponent,
   },
-};
+});
 </script>
 
 <style lang="scss">
