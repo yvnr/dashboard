@@ -61,7 +61,6 @@ export default {
   methods: {
     onClick() {
       this.visibleVerticallyCenteredDemo = true;
-      this.$emit('reload-applications');
     },
   },
 };
@@ -70,6 +69,6 @@ export default {
 <style lang="scss" scoped>
 .button {
   background-color: var(--light-grey);
-  border-style :groove;
+  border-style: groove;
 }
 </style>

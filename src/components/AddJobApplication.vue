@@ -111,7 +111,7 @@ export default {
         if (this.update) {
           // const res = await axios.post('http://localhost:3000/items', application);  //Update Call
         } else {
-        // const res = await axios.post('http://localhost:3000/items', application);  //Post Call
+          // const res = await axios.post('http://localhost:3000/items', application);  //Post Call
         }
         const res = {};
         console.log(res);
@@ -120,8 +120,13 @@ export default {
         console.log(error);
       }
       if (this.update) {
-        alert('Your Update Has Been Recorded\nIf do not choose to make furthre changes\nPlease close the form.');
+        alert(
+          'Your Update Has Been Recorded\nIf do not choose to make furthre changes\nPlease close the form.',
+        );
       } else {
+        alert(
+          'Your Application Has Been Added\nIf do not choose to add more applications\nPlease close the form.',
+        );
         this.company = '';
         this.position = '';
         this.duration = '';

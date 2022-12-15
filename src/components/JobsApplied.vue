@@ -1,6 +1,7 @@
 <template>
   <div class="container-fluid">
     <table v-if="filteredData.length" class="container-fluid">
+    <caption style="caption-side:bottom text-align:left">List of Jobs Applied</caption>
       <thead>
         <tr>
           <th
