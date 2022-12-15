@@ -53,6 +53,25 @@ export default {
   components: {
     CButton,
   },
+  props: {
+    application: {
+      default() {
+        return {
+          company: '',
+          position: '',
+          duration: '',
+          jobID: '',
+          location: '',
+          status: '',
+        };
+      },
+      type: Object,
+    },
+    update: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       company: '',
@@ -62,6 +81,14 @@ export default {
       location: '',
       status: '',
     };
+  },
+  created() {
+    this.company = this.application.company;
+    this.position = this.application.position;
+    this.duration = this.application.duration;
+    this.jobID = this.application.jobID;
+    this.location = this.application.location;
+    this.status = this.application.status;
   },
   methods: {
     async onSubmit(e) {
@@ -81,19 +108,27 @@ export default {
       };
       console.log(application);
       try {
-        // const res = await axios.post('http://localhost:3000/items', application);
+        if (this.update) {
+          // const res = await axios.post('http://localhost:3000/items', application);  //Update Call
+        } else {
+        // const res = await axios.post('http://localhost:3000/items', application);  //Post Call
+        }
         const res = {};
         console.log(res);
         // this.items = [res.data, ...this.items];
       } catch (error) {
         console.log(error);
       }
-      this.company = '';
-      this.position = '';
-      this.duration = '';
-      this.jobID = '';
-      this.location = '';
-      this.status = '';
+      if (this.update) {
+        alert('Your Update Has Been Recorded\nIf do not choose to make furthre changes\nPlease close the form.');
+      } else {
+        this.company = '';
+        this.position = '';
+        this.duration = '';
+        this.jobID = '';
+        this.location = '';
+        this.status = '';
+      }
     },
     validationForEmptyValues() {
       if (!this.company) {

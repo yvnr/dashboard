@@ -40,7 +40,14 @@ export default {
   },
   data() {
     return {
-      gridColumns: [],
+      gridColumns: [
+        'Position',
+        'Applied',
+        'Assessment',
+        'Interview',
+        'Accepted',
+        'Rejected',
+      ],
       gridData: [],
       sortKey: '',
       sortOrders: {},
@@ -48,14 +55,6 @@ export default {
   },
   created() {
     //   TODO Need to fetch this data from API
-    this.gridColumns = [
-      'Position',
-      'Applied',
-      'Assessment',
-      'Interview',
-      'Accepted',
-      'Rejected',
-    ];
     this.gridData = [
       {
         Position: 'SDE-1',

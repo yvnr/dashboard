@@ -99,7 +99,14 @@ export default {
   },
   data() {
     return {
-      gridColumns: [],
+      gridColumns: [
+        'Company',
+        'Applied',
+        'Assessment',
+        'Interview',
+        'Accepted',
+        'Rejected',
+      ],
       gridData: [],
       sortKey: '',
       sortOrders: {},
@@ -108,14 +115,6 @@ export default {
   },
   created() {
     //   TODO Need to fetch this data from API
-    this.gridColumns = [
-      'Company',
-      'Applied',
-      'Assessment',
-      'Interview',
-      'Accepted',
-      'Rejected',
-    ];
     this.gridData = [
       {
         Company: 'Amazon',
