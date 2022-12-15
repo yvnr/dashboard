@@ -1,19 +1,19 @@
 <template>
   <div class="container">
-<form @submit.stop.prevent="login">
-  <label for="email"><b>Email</b>
-    <input type="text" v-model="email" name="email" id="email" placeholder="Enter email" required/>
-  </label>
-  <label for="password"><b>Password</b>
-    <input type="password" v-model="password" name="password" id="password" placeholder="Enter Password" required/>
-  </label>
-  <div class="error" v-show="error" >{{error}}</div>
-  <button type="submit" class="registerbtn">Login</button>
-<div class="container register">
-  <p>No account? <a href="/register">Create one</a>.</p>
-</div>
-</form>
-</div>
+    <form @submit.stop.prevent="login">
+      <label for="email"><b>Email</b>
+        <input type="text" v-model="email" name="email" id="email" placeholder="Enter email" :disabled="isDisabled" required/>
+      </label>
+      <label for="password"><b>Password</b>
+        <input type="password" v-model="password" name="password" id="password" placeholder="Enter Password" :disabled="isDisabled" required/>
+      </label>
+      <button type="submit" class="loginbtn">Login</button>
+      <div class="error" v-for="error in errors" :key="error" >{{error}}</div>
+      <div class="register">
+        <div>No account? <a href="/register">Create one</a></div>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script lang="ts">
@@ -27,21 +27,41 @@ export default defineComponent({
   setup() {
     const email = ref('');
     const password = ref('');
-    const error = ref(null);
+    const errors = ref([] as string[]);
+    const isDisabled = ref(false);
 
     const store = useStore();
     const router = useRouter();
+
+    function validateForm() {
+      const errorMessage: string[] = [];
+      if (!email.value || !email.value.includes('@')) {
+        errorMessage.push('Email is invalid');
+      }
+
+      if (!password.value || password.value.length < 8 || password.value.length > 50) {
+        errorMessage.push('Please enter password with 8-50 characters');
+      }
+      return errorMessage;
+    }
     async function login() {
+      isDisabled.value = true;
+      errors.value = validateForm();
+      if (errors.value.length) {
+        isDisabled.value = false;
+        return;
+      }
       try {
         const response = await signInWithEmailAndPassword(auth, email.value, password.value);
-        store.dispatch('populateUser', response);
+        await store.dispatch('createSession', response);
         router.push('/');
       } catch (err: any) {
-        error.value = err.message;
+        errors.value.push('Invalid credentials. Please try again');
+        isDisabled.value = false;
       }
     }
     return {
-      login, email, password, error,
+      login, email, password, errors, isDisabled,
     };
   },
 });
@@ -59,8 +79,21 @@ body {
 
 /* Add padding to containers */
 .container {
-  padding: 16px;
+  padding: 30px;
   background-color: white;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  padding: 20px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+form{
+  display: flex;
+  flex-direction: column;
 }
 
 label{
@@ -89,18 +122,17 @@ hr {
 }
 
 /* Set a style for the submit button */
-.registerbtn {
+.loginbtn {
   background-color: #04AA6D;
   color: white;
   padding: 16px 20px;
   margin: 8px 0;
   border: none;
   cursor: pointer;
-  width: 100%;
   opacity: 0.9;
 }
 
-.registerbtn:hover {
+.loginbtn:hover {
   opacity: 1;
 }
 
@@ -111,11 +143,11 @@ a {
 
 /* Set a grey background color and center the text of the "sign in" section */
 .register {
-  background-color: #f1f1f1;
   text-align: center;
 }
 
 .error {
   color: crimson;
+  font-size: 12px;
 }
 </style>

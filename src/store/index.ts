@@ -42,12 +42,12 @@ const store: StoreOptions<UserState> = {
       state.sessionToken = sessionStorage.getItem('sessionToken');
     },
     clearStore: (state) => {
-      state.name = undefined;
-      state.email = undefined;
-      state.univName = undefined;
-      state.uid = undefined;
-      state.univId = undefined;
-      state.sessionToken = undefined;
+      state.name = null;
+      state.email = null;
+      state.univName = null;
+      state.uid = null;
+      state.univId = null;
+      state.sessionToken = null;
     },
   },
 

@@ -1,30 +1,30 @@
 <template>
     <div class="container">
-  <form @submit.stop.prevent="register">
-    <label for="name"><b>Name</b>
-       <input type="text" v-model="name" name="name" id="name" placeholder="Enter name" required/>
-    </label>
-    <label for="email"><b>Email</b>
-       <input type="text" v-model="email" name="email" id="email" placeholder="Enter email" required/>
-    </label>
-    <label for="password"><b>Password</b>
-       <input type="password" v-model="password" name="password" id="password" placeholder="Enter Password" required/>
-    </label>
-    <label for="university"><b>University</b>
-        <select v-model="univId">
-          <option disabled value="">Please select one</option>
-          <option v-for="univ in univList " :key ="univ.id" :value="univ.id">
-            {{univ.name}}
-          </option>
-        </select>
-    </label>
-    <div class="error" v-show="error" >{{error}}</div>
-    <button type="submit" class="registerbtn">Register</button>
-  <div class="container login">
-    <p>Already have an account? <a href="/login">Sign in</a>.</p>
-  </div>
-</form>
-</div>
+      <form @submit.stop.prevent="register">
+        <label for="name"><b>Name</b>
+          <input type="text" v-model="name" name="name" id="name" placeholder="Enter name" required/>
+        </label>
+        <label for="email"><b>Email</b>
+          <input type="text" v-model="email" name="email" id="email" placeholder="Enter email" required/>
+        </label>
+        <label for="password"><b>Password</b>
+          <input type="password" v-model="password" name="password" id="password" placeholder="Enter Password" required/>
+        </label>
+        <label for="university"><b>University</b>
+            <select v-model="univId">
+              <option disabled value="">Please select one</option>
+              <option v-for="univ in univList " :key ="univ.id" :value="univ.id">
+                {{univ.name}}
+              </option>
+            </select>
+        </label>
+        <div class="error" v-for="error in errors" :key="error" >{{error}}</div>
+        <button type="submit" class="registerbtn">Sign up</button>
+        <div class="login">
+          <p>Already have an account? <a href="/login">Sign in</a>.</p>
+        </div>
+      </form>
+    </div>
  </template>
 
 <script lang="ts">
@@ -37,28 +37,63 @@ import { auth, signInWithCustomToken } from '../store/helpers/firebase_auth';
 export default {
   name: 'RegisterComponent',
   setup() {
-    const name = ref(null);
-    const email = ref(null);
-    const univId = ref(null);
-    const password = ref(null);
-    const error = ref(null);
-    const univList = ref([]);
+    const name = ref('');
+    const email = ref('');
+    const univId = ref('');
+    const password = ref('');
+    const errors = ref([] as string[]);
+    const univList = ref([] as {id: string, name:string, emailDomains: string[]}[]);
+    const isDisabled = ref(false);
 
     const store = useStore();
     const router = useRouter();
 
+    function validateForm() {
+      const errorMessage: string[] = [];
+
+      if (!name.value || name.value.length < 4 || name.value.length > 50) {
+        errorMessage.push('Please enter name with 4-50 characters');
+      }
+
+      if (!univId.value) {
+        errorMessage.push('Please select the university');
+      }
+
+      if (!email.value) {
+        errorMessage.push('Please enter an email');
+      }
+
+      const univData = univList.value.find((x) => x.id === univId.value);
+      if (univData && email.value && !univData.emailDomains.find((x) => email.value.endsWith(x))) {
+        errorMessage.push('Email domain is not registered by the university');
+      }
+
+      if (!password.value || password.value.length < 8 || password.value.length > 50) {
+        errorMessage.push('Please enter password with 8-50 characters');
+      }
+      return errorMessage;
+    }
+
     async function register() {
+      isDisabled.value = true;
+      errors.value = validateForm();
+      if (errors.value.length) {
+        isDisabled.value = false;
+        return;
+      }
       try {
         const resp = await axios.post('http://localhost:8000/api/user/register', {
           email: email.value, password: password.value, univId: univId.value, name: name.value,
         });
         const { sessionToken } = resp.data;
         const response = await signInWithCustomToken(auth, sessionToken);
-        store.dispatch('populateUser', response);
+        console.info(response);
+        await store.dispatch('createSession', response);
+        errors.value = [];
         router.push('/');
       } catch (err: any) {
-        console.info(err);
-        error.value = err.message;
+        errors.value.push(err.response.data.message);
+        isDisabled.value = false;
       }
     }
 
@@ -73,7 +108,7 @@ export default {
     });
 
     return {
-      register, name, email, univId, password, error, univList,
+      register, name, email, univId, password, errors, univList,
     };
   },
 
@@ -94,6 +129,19 @@ body {
 .container {
   padding: 16px;
   background-color: white;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  padding: 20px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+form{
+  display: flex;
+  flex-direction: column;
 }
 
 label{
@@ -103,7 +151,7 @@ label{
 /* Full-width input fields */
 input[type=text], input[type=password], select {
   width: 100%;
-  padding: 15px;
+  padding: 10px;
   margin: 5px 0 22px 0;
   display: block;
   border: none;
@@ -144,11 +192,11 @@ a {
 
 /* Set a grey background color and center the text of the "sign in" section */
 .login {
-  background-color: #f1f1f1;
   text-align: center;
 }
 
 .error {
   color: crimson;
+  font-size: 12px;
 }
 </style>
