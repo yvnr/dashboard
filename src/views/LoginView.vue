@@ -1,4 +1,5 @@
 <template>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
   <div class="container">
     <form @submit.stop.prevent="login">
       <label for="email"><b>Email</b>
@@ -7,7 +8,9 @@
       <label for="password"><b>Password</b>
         <input type="password" v-model="password" name="password" id="password" placeholder="Enter Password" :disabled="isDisabled" required/>
       </label>
-      <button type="submit" class="loginbtn">Login</button>
+      <button type="submit" class="loginbtn" :disabled="isDisabled">{{btnTxt}}
+        <i :class="{'fa-spin fa fa-refresh' : isDisabled}"></i>
+      </button>
       <div class="error" v-for="error in errors" :key="error" >{{error}}</div>
       <div class="register">
         <div>No account? <a href="/register">Create one</a></div>
@@ -22,6 +25,12 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { auth, signInWithEmailAndPassword } from '../store/helpers/firebase_auth';
 
+// eslint-disable-next-line no-shadow
+enum ButtonText {
+    'Login' = 'Login',
+    'LoggingIn' ='Logging in'
+}
+
 export default defineComponent({
   name: 'loginView',
   setup() {
@@ -29,6 +38,7 @@ export default defineComponent({
     const password = ref('');
     const errors = ref([] as string[]);
     const isDisabled = ref(false);
+    const btnTxt = ref(ButtonText.Login);
 
     const store = useStore();
     const router = useRouter();
@@ -46,9 +56,11 @@ export default defineComponent({
     }
     async function login() {
       isDisabled.value = true;
+      btnTxt.value = ButtonText.LoggingIn;
       errors.value = validateForm();
       if (errors.value.length) {
         isDisabled.value = false;
+        btnTxt.value = ButtonText.Login;
         return;
       }
       try {
@@ -56,12 +68,13 @@ export default defineComponent({
         await store.dispatch('createSession', response);
         router.push('/');
       } catch (err: any) {
+        btnTxt.value = ButtonText.Login;
         errors.value.push('Invalid credentials. Please try again');
         isDisabled.value = false;
       }
     }
     return {
-      login, email, password, errors, isDisabled,
+      login, email, password, errors, isDisabled, btnTxt,
     };
   },
 });
@@ -130,6 +143,10 @@ hr {
   border: none;
   cursor: pointer;
   opacity: 0.9;
+}
+
+.loginbtn :disabled{
+  background-color: #b9c1be;
 }
 
 .loginbtn:hover {

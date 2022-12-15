@@ -1,17 +1,18 @@
 <template>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <div class="container">
       <form @submit.stop.prevent="register">
         <label for="name"><b>Name</b>
-          <input type="text" v-model="name" name="name" id="name" placeholder="Enter name" required/>
+          <input type="text" v-model="name" name="name" id="name" placeholder="Enter name" :disabled="isDisabled" required/>
         </label>
         <label for="email"><b>Email</b>
-          <input type="text" v-model="email" name="email" id="email" placeholder="Enter email" required/>
+          <input type="text" v-model="email" name="email" id="email" placeholder="Enter email" :disabled="isDisabled" required/>
         </label>
         <label for="password"><b>Password</b>
-          <input type="password" v-model="password" name="password" id="password" placeholder="Enter Password" required/>
+          <input type="password" v-model="password" name="password" id="password" placeholder="Enter Password" :disabled="isDisabled" required/>
         </label>
         <label for="university"><b>University</b>
-            <select v-model="univId">
+            <select v-model="univId" :disabled="isDisabled">
               <option disabled value="">Please select one</option>
               <option v-for="univ in univList " :key ="univ.id" :value="univ.id">
                 {{univ.name}}
@@ -19,7 +20,9 @@
             </select>
         </label>
         <div class="error" v-for="error in errors" :key="error" >{{error}}</div>
-        <button type="submit" class="registerbtn">Sign up</button>
+        <button type="submit" class="registerbtn" :disabled="isDisabled">{{btnTxt}}
+          <i :class="{'fa-spin fa fa-refresh': isDisabled}"></i>
+        </button>
         <div class="login">
           <p>Already have an account? <a href="/login">Sign in</a>.</p>
         </div>
@@ -34,6 +37,12 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { auth, signInWithCustomToken } from '../store/helpers/firebase_auth';
 
+// eslint-disable-next-line no-shadow
+enum ButtonText {
+    'SignUp' = 'Sign up',
+    'SigningUp' ='Signing up'
+}
+
 export default {
   name: 'RegisterComponent',
   setup() {
@@ -44,6 +53,7 @@ export default {
     const errors = ref([] as string[]);
     const univList = ref([] as {id: string, name:string, emailDomains: string[]}[]);
     const isDisabled = ref(false);
+    const btnTxt = ref(ButtonText.SignUp);
 
     const store = useStore();
     const router = useRouter();
@@ -76,9 +86,11 @@ export default {
 
     async function register() {
       isDisabled.value = true;
+      btnTxt.value = ButtonText.SigningUp;
       errors.value = validateForm();
       if (errors.value.length) {
         isDisabled.value = false;
+        btnTxt.value = ButtonText.SignUp;
         return;
       }
       try {
@@ -92,6 +104,7 @@ export default {
         errors.value = [];
         router.push('/');
       } catch (err: any) {
+        btnTxt.value = ButtonText.SignUp;
         errors.value.push(err.response.data.message);
         isDisabled.value = false;
       }
@@ -108,7 +121,7 @@ export default {
     });
 
     return {
-      register, name, email, univId, password, errors, univList,
+      register, name, email, univId, password, errors, univList, isDisabled, btnTxt,
     };
   },
 
