@@ -12,14 +12,9 @@
       <input type="text" v-model="position" name="position" id="position" placeholder="Add Position"/>
       </label>
     </div>
-    <!-- <div class="form-control">
-      <label for="duration">Duration
-      <input type="text" v-model="duration" name="duration" id="duration" placeholder="Add Duration"/>
-      </label>
-    </div> -->
     <div class="form-control">
-      <label for="jobID">Job ID
-      <input type="text" v-model="jobID" name="jobID" id="jobID" placeholder="Add Job ID"/>
+      <label for="jobId">Job ID
+      <input type="text" v-model="jobId" name="jobId" id="jobId" placeholder="Add Job ID"/>
       </label>
     </div>
     <div class="form-control">
@@ -31,14 +26,20 @@
       <label for="status">Status
       <select v-model="status" name="status" id="status">
         <option disabled value="">Please select your applications current status</option>
-        <option>Applied</option>
-        <option>Assessment</option>
-        <option>Interview</option>
-        <option>Accepted</option>
-        <option>Rejected</option>
+        <option>APPLIED</option>
+        <option>ASSESSMENT</option>
+        <option>INTERVIEW</option>
+        <option>SELECTED</option>
+        <option>REJECTED</option>
       </select>
       </label>
     </div>
+    <div class="form-control">
+      <label for="time">Date
+      <input type="text" v-model="time" name="time" id="time" placeholder="YYYY-MM-DD"/>
+      </label>
+    </div>
+    <div class="error" v-for="error in errors" :key="error" >{{error}}</div>
     <CButton type="submit" class="button">Submit</CButton>
   </form>
  </div>
@@ -64,10 +65,11 @@ export default {
         return {
           company: '',
           position: '',
-          // duration: '',
-          jobID: '',
+          jobId: '',
           location: '',
           status: '',
+          time: '',
+          id: null,
         };
       },
       type: Object,
@@ -91,13 +93,9 @@ export default {
        */
       position: '',
       /**
-       * duration of role.
-       */
-      // duration: '',
-      /**
        * jobID of role.
        */
-      jobID: '',
+      jobId: '',
       /**
        * company location.
        */
@@ -106,15 +104,25 @@ export default {
        * application status.
        */
       status: '',
+      /**
+       * application last edited time.
+       */
+      time: '',
+      /**
+       * error messages.
+       */
+      errors: [],
     };
   },
   created() {
-    this.company = this.application.company;
-    this.position = this.application.position;
-    // this.duration = this.application.duration;
-    this.jobID = this.application.jobID;
-    this.location = this.application.location;
-    this.status = this.application.status;
+    if (this.update) {
+      this.company = this.application.company;
+      this.position = this.application.position;
+      this.jobId = this.application.jobId;
+      this.location = this.application.location;
+      this.status = this.application.status;
+      this.time = this.application.time;
+    }
   },
   methods: {
     /**
@@ -131,30 +139,38 @@ export default {
       const application = {
         company: this.company,
         position: this.position,
-        // duration: this.duration,
-        jobID: this.jobID,
+        jobId: this.jobId,
         location: this.location,
         status: this.status,
-        time: '2022-12-24',
+        time: this.time,
       };
       console.log(application);
       try {
         if (this.update) {
-          const res = await axios.post(
-            'http://localhost:3000/items',
-            application,
-          );
-          alert(
-            'Your Update Has Been Recorded\nIf you do not choose to make furthre changes\nPlease close the form.',
-          );
-        } else {
-          const res = await axios.post(
-            urls.tracker.domain + urls.tracker.domain.post_applications,
+          const res = await axios.put(
+            `${urls.tracker.domain}${urls.tracker.path}/${this.application.id}`,
             application,
             {
               headers: {
-                'x-uid': 123,
-                'x-univ-id': 123,
+                'x-uid': store.state.uid,
+                'x-univ-id': store.state.univId,
+                Authorization: `idToken ${store.state.sessionToken}`,
+              },
+            },
+          );
+          console.log(res);
+          alert(
+            'Your Update Has Been Recorded\nIf you do not choose to make furthre changes to this application\nPlease close the form.',
+          );
+        } else {
+          const res = await axios.post(
+            urls.tracker.domain + urls.tracker.path,
+            application,
+            {
+              headers: {
+                'x-uid': store.state.uid,
+                'x-univ-id': store.state.univId,
+                Authorization: `idToken ${store.state.sessionToken}`,
               },
             },
           );
@@ -164,14 +180,15 @@ export default {
           );
           this.company = '';
           this.position = '';
-          // this.duration = '';
-          this.jobID = '';
+          this.jobId = '';
           this.location = '';
           this.status = '';
+          this.time = '';
         }
         // this.items = [res.data, ...this.items];
       } catch (error) {
         console.log(error);
+        this.errors.push(error.response.data.errorMessage);
       }
     },
     /**
@@ -191,7 +208,7 @@ export default {
       //   alert('Please enter duration you applied for');
       //   return true;
       // }
-      if (!this.jobID) {
+      if (!this.jobId) {
         alert('Please enter Job ID');
         return true;
       }
@@ -203,6 +220,10 @@ export default {
         alert("Please select your application's current status");
         return true;
       }
+      if (!this.time) {
+        alert('Please current date');
+        return true;
+      }
       return false;
     },
   },
@@ -210,6 +231,11 @@ export default {
 </script>
 
 <style scoped >
+.error {
+  color: crimson;
+  font-size: 24px;
+  padding-bottom: 1px;
+}
 .button {
   background-color: var(--light-grey);
   border-style: groove;

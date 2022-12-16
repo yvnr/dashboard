@@ -34,6 +34,7 @@
         </tr>
       </tbody>
     </table>
+    <div class="error" v-for="error in errors" :key="error" >{{error}}</div>
   </div>
   <CModal
     alignment="center"
@@ -78,6 +79,9 @@ import {
   CModalBody,
   CModalFooter,
 } from '@coreui/vue';
+import moment from 'moment';
+import { urls } from '../config.json';
+import store from '../store';
 import AddJobApplication from './AddJobApplication.vue';
 
 export default {
@@ -96,7 +100,7 @@ export default {
       /**
        * Table column headers.
        */
-      gridKeys: ['company', 'position', 'status', 'jobID', 'location', 'time'],
+      gridKeys: ['company', 'position', 'status', 'jobId', 'location', 'time'],
       /**
        * Table rows.
        */
@@ -146,41 +150,32 @@ export default {
      */
     async fetch() {
       try {
-        // const res = await axios.get('http://localhost:3000/items');
-        const res = {};
-        console.log(res);
-        this.gridData = [
-          {
-            company: 'Amazon',
-            position: 'Software Developement Engineer',
-            status: 'Applied',
-            jobID: '89624',
-            location: 'Bposton, MA',
-            time: '2022-01-12',
-            _cellProps: { id: { scope: 'row' } },
+        const res = await axios.get(urls.tracker.domain + urls.tracker.path, {
+          params: { startId: 1, numberOfRecords: 2000 },
+          headers: {
+            'x-uid': store.state.uid,
+            'x-univ-id': store.state.univId,
+            Authorization: `idToken ${store.state.sessionToken}`,
           },
-          {
-            company: 'Meta',
-            position: 'Software Developement Engineer',
-            status: 'Assessment',
-            jobID: '89624',
-            location: 'Bposton, MA',
-            time: '2022-01-12',
-            _cellProps: { id: { scope: 'row' } },
-          },
-          {
-            company: 'Google',
-            position: 'Software Developement Engineer',
-            status: 'Interview',
-            jobID: '89624',
-            location: 'Bposton, MA',
-            time: '2022-01-12',
-            _cellProps: { id: { scope: 'row' } },
-          },
-        ];
+        });
+        console.log(res.data.jobApplications);
+        this.gridData = this.formatDateEntries(res.data.jobApplications);
+        console.log(this.gridData);
       } catch (error) {
         console.log(error);
+        this.errors.push(error.response.data.errorMessage);
       }
+    },
+    /**
+     * Format the date in given applications list.
+     * @param jobApplications list of applications
+     * @return list of applications
+     */
+    formatDateEntries(jobApplications) {
+      jobApplications.forEach((curr) => {
+        curr.time = moment(curr.time).format('YYYY-MM-DD');
+      });
+      return jobApplications;
     },
     /**
      * Gets called when the component is created.
@@ -210,7 +205,7 @@ export default {
      * @param application application selected by user
      */
     editApplicationData(application) {
-      // console.log(application);
+      console.log(application);
       this.applicationSelectedToEdit = application;
     },
   },
@@ -218,6 +213,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.error {
+  color: crimson;
+  font-size: 24px;
+  padding-bottom: 1px;
+}
 table {
   border: 2px solid #50ad72;
   border-radius: 3px;

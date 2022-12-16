@@ -79,5 +79,7 @@ button {
       padding-left: 6rem;
     }
   }
+
+  padding-bottom: 1.5rem;
 }
 </style>
