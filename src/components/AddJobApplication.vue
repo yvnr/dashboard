@@ -13,13 +13,8 @@
       </label>
     </div>
     <div class="form-control">
-      <label for="duration">Duration
-      <input type="text" v-model="duration" name="duration" id="duration" placeholder="Add Duration"/>
-      </label>
-    </div>
-    <div class="form-control">
-      <label for="jobID">Job ID
-      <input type="text" v-model="jobID" name="jobID" id="jobID" placeholder="Add Job ID"/>
+      <label for="jobId">Job ID
+      <input type="text" v-model="jobId" name="jobId" id="jobId" placeholder="Add Job ID"/>
       </label>
     </div>
     <div class="form-control">
@@ -31,14 +26,20 @@
       <label for="status">Status
       <select v-model="status" name="status" id="status">
         <option disabled value="">Please select your applications current status</option>
-        <option>Applied</option>
-        <option>Assessment</option>
-        <option>Interview</option>
-        <option>Accepted</option>
-        <option>Rejected</option>
+        <option>APPLIED</option>
+        <option>ASSESSMENT</option>
+        <option>INTERVIEW</option>
+        <option>SELECTED</option>
+        <option>REJECTED</option>
       </select>
       </label>
     </div>
+    <div class="form-control">
+      <label for="time">Date
+      <input type="text" v-model="time" name="time" id="time" placeholder="YYYY-MM-DD"/>
+      </label>
+    </div>
+    <div class="error" v-for="error in errors" :key="error" >{{error}}</div>
     <CButton type="submit" class="button">Submit</CButton>
   </form>
  </div>
@@ -47,6 +48,8 @@
 <script>
 import axios from 'axios';
 import { CButton } from '@coreui/vue';
+import { urls } from '../config.json';
+import store from '../store';
 
 export default {
   name: 'AddJobApplication',
@@ -54,19 +57,26 @@ export default {
     CButton,
   },
   props: {
+    /**
+     * Default values of application form fields.
+     */
     application: {
       default() {
         return {
           company: '',
           position: '',
-          duration: '',
-          jobID: '',
+          jobId: '',
           location: '',
           status: '',
+          time: '',
+          id: null,
         };
       },
       type: Object,
     },
+    /**
+     * Stores whether Update/Add form.
+     */
     update: {
       type: Boolean,
       default: false,
@@ -74,23 +84,51 @@ export default {
   },
   data() {
     return {
+      /**
+       * company name.
+       */
       company: '',
+      /**
+       * position applied for.
+       */
       position: '',
-      duration: '',
-      jobID: '',
+      /**
+       * jobID of role.
+       */
+      jobId: '',
+      /**
+       * company location.
+       */
       location: '',
+      /**
+       * application status.
+       */
       status: '',
+      /**
+       * application last edited time.
+       */
+      time: '',
+      /**
+       * error messages.
+       */
+      errors: [],
     };
   },
   created() {
-    this.company = this.application.company;
-    this.position = this.application.position;
-    this.duration = this.application.duration;
-    this.jobID = this.application.jobID;
-    this.location = this.application.location;
-    this.status = this.application.status;
+    if (this.update) {
+      this.company = this.application.company;
+      this.position = this.application.position;
+      this.jobId = this.application.jobId;
+      this.location = this.application.location;
+      this.status = this.application.status;
+      this.time = this.application.time;
+    }
   },
   methods: {
+    /**
+     * Gets called when user adds application.
+     * makes a POST/PUT API call to persit applicaiton data
+     */
     async onSubmit(e) {
       e.preventDefault();
 
@@ -101,40 +139,62 @@ export default {
       const application = {
         company: this.company,
         position: this.position,
-        duration: this.duration,
-        jobID: this.jobID,
+        jobId: this.jobId,
         location: this.location,
         status: this.status,
+        time: this.time,
       };
       console.log(application);
       try {
         if (this.update) {
-          // const res = await axios.post('http://localhost:3000/items', application);  //Update Call
+          const res = await axios.put(
+            `${urls.tracker.domain}${urls.tracker.application_path}/${this.application.id}`,
+            application,
+            {
+              headers: {
+                'x-uid': store.state.uid,
+                'x-univ-id': store.state.univId,
+                Authorization: `idToken ${store.state.sessionToken}`,
+              },
+            },
+          );
+          console.log(res);
+          alert(
+            'Your Update Has Been Recorded\nIf you do not choose to make furthre changes to this application\nPlease close the form.',
+          );
         } else {
-          // const res = await axios.post('http://localhost:3000/items', application);  //Post Call
+          const res = await axios.post(
+            urls.tracker.domain + urls.tracker.application_path,
+            application,
+            {
+              headers: {
+                'x-uid': store.state.uid,
+                'x-univ-id': store.state.univId,
+                Authorization: `idToken ${store.state.sessionToken}`,
+              },
+            },
+          );
+          console.log(res);
+          alert(
+            'Your Application Has Been Added\nIf you do not choose to add more applications\nPlease close the form.',
+          );
+          this.company = '';
+          this.position = '';
+          this.jobId = '';
+          this.location = '';
+          this.status = '';
+          this.time = '';
         }
-        const res = {};
-        console.log(res);
         // this.items = [res.data, ...this.items];
       } catch (error) {
         console.log(error);
-      }
-      if (this.update) {
-        alert(
-          'Your Update Has Been Recorded\nIf do not choose to make furthre changes\nPlease close the form.',
-        );
-      } else {
-        alert(
-          'Your Application Has Been Added\nIf do not choose to add more applications\nPlease close the form.',
-        );
-        this.company = '';
-        this.position = '';
-        this.duration = '';
-        this.jobID = '';
-        this.location = '';
-        this.status = '';
+        this.errors.push(error.response.data.errorMessage);
       }
     },
+    /**
+     * validates form fields for empty values.
+     * @return true if all form fields are valid else false
+     */
     validationForEmptyValues() {
       if (!this.company) {
         alert('Please enter the company you applied for');
@@ -144,11 +204,7 @@ export default {
         alert('Please enter position you applied for');
         return true;
       }
-      if (!this.duration) {
-        alert('Please enter duration you applied for');
-        return true;
-      }
-      if (!this.jobID) {
+      if (!this.jobId) {
         alert('Please enter Job ID');
         return true;
       }
@@ -160,6 +216,10 @@ export default {
         alert("Please select your application's current status");
         return true;
       }
+      if (!this.time) {
+        alert('Please current date');
+        return true;
+      }
       return false;
     },
   },
@@ -167,6 +227,11 @@ export default {
 </script>
 
 <style scoped >
+.error {
+  color: crimson;
+  font-size: 24px;
+  padding-bottom: 1px;
+}
 .button {
   background-color: var(--light-grey);
   border-style: groove;

@@ -18,10 +18,18 @@ export default {
   },
   data() {
     return {
+      /**
+       * current search criteria that is set by user.
+       */
       searchObject: {},
     };
   },
   methods: {
+    /**
+     * Gets called when the user updates the fiter.
+     * updates the search object with the user entry
+     * @param searchCriteria search filters set by the user
+     */
     filterOnCompany(searchCriteria) {
       this.searchObject = searchCriteria;
     },

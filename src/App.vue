@@ -20,10 +20,19 @@ import LeftNavigationBar from './components/LeftNavigationBar.vue';
 import FooterComponent from './components/FooterComponent.vue';
 import HeaderComponent from './components/HeaderComponent.vue';
 
+/**
+ * When the application is loaded, this is the entering the root component which loads up
+ * This component has one prop - userAuthenticated (tracks whether the user is logged in or not)
+ * userAuthenticated - is boolen. If user is logged in, the value is true(NavBar is shown)
+ * else, the value is false(NavBar is hidden)
+ */
 export default defineComponent({
   name: 'App',
   setup() {
     const userAuthenticated = ref(!!store.state.sessionToken);
+    /**
+     * adding the watcher for userAuthenticated key to vuex store
+     */
     watchEffect(() => {
       userAuthenticated.value = !!store.state.sessionToken;
     });
@@ -79,5 +88,7 @@ button {
       padding-left: 6rem;
     }
   }
+
+  padding-bottom: 1.5rem;
 }
 </style>

@@ -1,3 +1,8 @@
+/** This file handles the routing for entire application
+* When a user tries to access a particluar page if authorized lands on the page
+* else redirected to login page
+*/
+
 import { createRouter, createWebHistory } from 'vue-router';
 import store from '../store';
 import Applications from '../views/ApplicationsView.vue';
@@ -30,8 +35,13 @@ const router = createRouter({
   ],
 });
 
+/**
+ * Every route handle goes through this function.
+ * if user is not logged in, all routes are redirected to login route except when for the register route
+ * if user is logged in, and if login route is requested, they are redirected to home page('/')
+ */
 router.beforeEach((to, from, next) => {
-  if (store?.state?.sessionToken) {
+  if (store?.state?.sessionToken) { // user logged in
     if (to.path === '/register' || to.path === '/login') {
       return next({ path: '/' });
     }

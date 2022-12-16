@@ -1,7 +1,9 @@
 <template>
   <div class="container-fluid">
     <table v-if="filteredData.length" class="container-fluid">
-    <caption style="caption-side:bottom text-align:left">List of Jobs Applied</caption>
+      <caption style="caption-side:bottom text-align:left">
+        List of Jobs Applied
+      </caption>
       <thead>
         <tr>
           <th
@@ -32,6 +34,7 @@
         </tr>
       </tbody>
     </table>
+    <div class="error" v-for="error in errors" :key="error">{{ error }}</div>
   </div>
   <CModal
     alignment="center"
@@ -76,6 +79,9 @@ import {
   CModalBody,
   CModalFooter,
 } from '@coreui/vue';
+import moment from 'moment';
+import { urls } from '../config.json';
+import store from '../store';
 import AddJobApplication from './AddJobApplication.vue';
 
 export default {
@@ -91,17 +97,41 @@ export default {
   },
   data() {
     return {
-      gridKeys: ['company', 'position', 'status', 'jobID', 'location', 'time'],
+      /**
+       * Table column headers.
+       */
+      gridKeys: ['company', 'position', 'status', 'jobId', 'location', 'time'],
+      /**
+       * Table rows.
+       */
       gridData: [],
+      /**
+       * Column on which the table is currently sorted.
+       */
       sortKey: '',
+      /**
+       * Sorted order of the data in the table.
+       */
       sortOrders: {},
+      /**
+       * row data being updated by the user.
+       */
       applicationSelectedToEdit: null,
+      /**
+       * error messages.
+       */
+      errors: [],
     };
   },
   created() {
     this.fetch();
+    this.computeSortedOrder();
   },
   computed: {
+    /**
+     * Gets called when the user click on the sort arrow.
+     * @return sorted table data
+     */
     filteredData() {
       const { sortKey } = this;
       const order = this.sortOrders[sortKey] || 1;
@@ -118,52 +148,69 @@ export default {
     },
   },
   methods: {
+    /**
+     * Gets called when the component is created.
+     * Makes an API call to fetch the data.
+     */
     async fetch() {
       try {
-        // const res = await axios.get('http://localhost:3000/items');
-        const res = {};
-        console.log(res);
-        this.gridData = [
+        const res = await axios.get(
+          urls.tracker.domain + urls.tracker.application_path,
           {
-            company: 'Amazon',
-            position: 'Software Developement Engineer',
-            status: 'Applied',
-            jobID: '89624',
-            location: 'Bposton, MA',
-            time: '2022-01-12',
-            _cellProps: { id: { scope: 'row' } },
+            params: { startId: 1, numberOfRecords: 2000 },
+            headers: {
+              'x-uid': store.state.uid,
+              'x-univ-id': store.state.univId,
+              Authorization: `idToken ${store.state.sessionToken}`,
+            },
           },
-          {
-            company: 'Meta',
-            position: 'Software Developement Engineer',
-            status: 'Assessment',
-            jobID: '89624',
-            location: 'Bposton, MA',
-            time: '2022-01-12',
-            _cellProps: { id: { scope: 'row' } },
-          },
-          {
-            company: 'Google',
-            position: 'Software Developement Engineer',
-            status: 'Interview',
-            jobID: '89624',
-            location: 'Bposton, MA',
-            time: '2022-01-12',
-            _cellProps: { id: { scope: 'row' } },
-          },
-        ];
+        );
+        console.log(res.data.jobApplications);
+        this.gridData = this.formatDateEntries(res.data.jobApplications);
+        console.log(this.gridData);
       } catch (error) {
         console.log(error);
+        this.errors.push(error.response.data.errorMessage);
       }
+    },
+    /**
+     * Format the date in given applications list.
+     * @param jobApplications list of applications
+     * @return list of applications
+     */
+    formatDateEntries(jobApplications) {
+      jobApplications.forEach((curr) => {
+        curr.time = moment(curr.time).format('YYYY-MM-DD');
+      });
+      return jobApplications;
+    },
+    /**
+     * Gets called when the component is created.
+     * Computes ascending order of each column.
+     */
+    computeSortedOrder() {
       this.sortOrders = this.gridKeys.reduce((o, key) => ((o[key] = 1), o), {});
     },
+    /**
+     * Sort the table data based on given column name.
+     * @param key column name on which the table is sorted
+     */
     sortBy(key) {
       this.sortKey = key;
       this.sortOrders[key] *= -1;
     },
+    /**
+     * Capitalizes the given string.
+     * @param str string to be capitalized
+     * @return capitilazied string
+     */
     capitalize(str) {
       return str.charAt(0).toUpperCase() + str.slice(1);
     },
+    /**
+     * Store the data of application selected by user to update.
+     * @param application application selected by user
+     */
     editApplicationData(application) {
       console.log(application);
       this.applicationSelectedToEdit = application;
@@ -173,6 +220,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.error {
+  color: crimson;
+  font-size: 24px;
+  padding-bottom: 1px;
+}
 table {
   border: 2px solid #50ad72;
   border-radius: 3px;

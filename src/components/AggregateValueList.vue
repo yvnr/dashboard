@@ -14,10 +14,7 @@
 </template>
 
 <script>
-import {
-  CContainer, CRow, CCol,
-} from '@coreui/vue';
-import * as icon from '@coreui/icons';
+import { CContainer, CRow, CCol } from '@coreui/vue';
 import AggregateValue from './AggregateValue.vue';
 
 export default {
@@ -30,11 +27,6 @@ export default {
     CContainer,
     CRow,
     CCol,
-  },
-  setup() {
-    return {
-      icon,
-    };
   },
 };
 </script>

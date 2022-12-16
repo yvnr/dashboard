@@ -1,3 +1,7 @@
+/**
+ * Initialising the firebase app
+ * We use firebase to connect with user auth system (Indentity Provider) for the login and signup page
+ */
 import { initializeApp } from 'firebase/app';
 import {
   getAuth, signInWithEmailAndPassword, signInWithCustomToken, signOut,

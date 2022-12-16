@@ -1,3 +1,6 @@
+/**
+ * Maintiaing all defined data types here
+ */
 interface UserRegisterState {
   name?: string;
   email?: string;

@@ -15,6 +15,9 @@ import InterviewExperience from './InterviewExperience.vue';
 export default {
   name: 'ExperiencesList',
   props: {
+    /**
+     * List of user experiences.
+     */
     experiences: Array,
   },
   components: {

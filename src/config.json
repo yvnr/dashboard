@@ -1,0 +1,20 @@
+{
+    "urls": {
+        "record": {
+            "domain": "http://127.0.0.1:8020/job-board-a3cdd/us-central1/api/api",
+            "path": "/experience",
+            "register_user_path": "/user/register",
+            "university_path": "/university"
+        },
+        "tracker": {
+            "domain": "http://127.0.0.1:8020/job-board-a3cdd/us-central1/api/api",
+            "application_path": "/application",
+            "aggregate_path": "/application/data"
+        },
+        "analytics": {
+            "domain": "http://127.0.0.1:8020/job-board-a3cdd/us-central1/api/api",
+            "company_path": "/analytics/company",
+            "position_path": "/analytics/position"
+        }
+    }
+}

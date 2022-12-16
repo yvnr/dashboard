@@ -1,32 +1,51 @@
 <template>
   <main id="interviewExperiences">
     <h1>Here, You Can Search for others Interview Experiences</h1>
-    <FilterForCompany
+    <!-- <FilterForCompany
       @filtered-on-company="setSearchCriteria"
-    ></FilterForCompany>
-    <AddInterviewExperienceModal :displayAddInterviewExperience="displayAddInterviewExperience"></AddInterviewExperienceModal>
+    ></FilterForCompany> -->
+    <AddInterviewExperienceModal
+      :displayAddInterviewExperience="displayAddInterviewExperience"
+    ></AddInterviewExperienceModal>
     <ExperiencesList :experiences="experiences"></ExperiencesList>
+    <div class="error" v-for="error in errors" :key="error">{{ error }}</div>
   </main>
 </template>
 
 <script>
 import axios from 'axios';
-import FilterForCompany from '../components/FilterForCompany.vue';
+import moment from 'moment';
+import { urls } from '../config.json';
+import store from '../store';
+// import FilterForCompany from '../components/FilterForCompany.vue';
 import ExperiencesList from '../components/ExperiencesList.vue';
 import AddInterviewExperienceModal from '../components/AddInterviewExperienceModal.vue';
 
 export default {
   name: 'InterviewExperiences',
   components: {
-    FilterForCompany,
+    // FilterForCompany,
     ExperiencesList,
     AddInterviewExperienceModal,
   },
   data() {
     return {
+      /**
+       * copmany details entered by user to filter experiences data.
+       */
       searchCriteria: {},
+      /**
+       * Experiences list.
+       */
       experiences: [],
+      /**
+       * Flag to control the Interview Experiences Form visibility.
+       */
       displayAddInterviewExperience: false,
+      /**
+       * error messages.
+       */
+      errors: [],
     };
   },
   created() {
@@ -36,33 +55,53 @@ export default {
     searchCriteria: 'fetchInterviewExpereinces',
   },
   methods: {
+    /**
+     * Gets called when user update search criteria.
+     * sets the search criteria to criteria enterd by user
+     * @param searchCriteria search filters set by the user
+     */
     setSearchCriteria(searchCriteria) {
+      console.log(searchCriteria);
       this.searchCriteria = searchCriteria;
     },
+    /**
+     * Gets called when the search criteria is updated.
+     * Makes an API call to fetch the data.
+     */
     async fetchInterviewExpereinces() {
       console.log(this.searchCriteria);
       try {
-        const res = await axios.get('http://127.0.0.1:8000/api/experience', {
+        const res = await axios.get(urls.record.domain + urls.record.path, {
           headers: {
-            'x-uid': 'test-value',
-            'x-univ-id': '7bOGvj1uUZg5pRJziNVi',
-            Authorization: 'record-1 7ff614a2-aa8a-4d1b-997e-fcb7877e91f6',
+            'x-uid': store.state.uid,
+            'x-univ-id': store.state.univId,
+            Authorization: `idToken ${store.state.sessionToken}`,
           },
         });
+        console.log(res.data);
         this.experiences = [];
         for (let i = 0; i < res.data.length; i += 1) {
           this.experiences.push({
             id: res.data[i].id,
             role: res.data[i].role,
-            result: 'Accepted',
-            on: new Date(res.data[i].createdAt.seconds * 1000).toLocaleDateString(),
+            result: res.data[i].status,
+            on: moment(res.data[i].updatedAt).format('YYYY-MM-DD'),
             data: res.data[i].summary,
           });
         }
       } catch (error) {
         console.log(error);
+        this.errors.push(error.response.data.errorMessage);
       }
     },
   },
 };
 </script>
+
+<style scoped>
+.error {
+  color: crimson;
+  font-size: 24px;
+  padding-bottom: 1px;
+}
+</style>
