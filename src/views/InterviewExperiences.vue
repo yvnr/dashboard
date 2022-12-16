@@ -15,6 +15,7 @@
 <script>
 import axios from 'axios';
 import moment from 'moment';
+import { ref } from 'vue';
 import { urls } from '../config.json';
 import store from '../store';
 // import FilterForCompany from '../components/FilterForCompany.vue';
@@ -46,13 +47,28 @@ export default {
        * error messages.
        */
       errors: [],
+      /**
+       * reload on form addition.
+       */
+      reloadToggleSrore: ref(store.state.reloadToggle),
     };
   },
   created() {
     this.fetchInterviewExpereinces();
+    this.unwatch = store.watch(
+      (state, getters) => getters.reloadToggle,
+      (newValue, oldValue) => {
+        console.log(oldValue, newValue);
+        this.reloadToggleSrore = newValue;
+      },
+      {
+        deep: true,
+      },
+    );
   },
   watch: {
     searchCriteria: 'fetchInterviewExpereinces',
+    reloadToggleSrore: 'fetchInterviewExpereinces',
   },
   methods: {
     /**

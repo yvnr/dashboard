@@ -187,9 +187,7 @@ export default {
           this.status = '';
           this.time = '';
         }
-        console.log(ref(store.state.reloadToggle));
         store.dispatch('updateToggle');
-        console.log(ref(store.state.reloadToggle));
 
         // this.items = [res.data, ...this.items];
       } catch (error) {

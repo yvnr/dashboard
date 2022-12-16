@@ -82,7 +82,6 @@ import {
 } from '@coreui/vue';
 import moment from 'moment';
 import { ref } from 'vue';
-import { mapState } from 'vuex';
 import { urls } from '../config.json';
 import store from '../store';
 import AddJobApplication from './AddJobApplication.vue';
@@ -141,7 +140,6 @@ export default {
       },
       {
         deep: true,
-      // immediate: true --> First old value is undefined
       },
     );
   },

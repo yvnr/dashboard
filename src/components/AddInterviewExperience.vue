@@ -119,6 +119,7 @@ export default {
         this.location = '';
         this.note = '';
         this.status = '';
+        store.dispatch('updateToggle');
         // this.items = [res.data, ...this.items];
       } catch (error) {
         console.log(error);
