@@ -17,6 +17,7 @@ interface UserState {
   uid: string | null;
   univId: string | null;
   sessionToken: string | null;
+  reloadToggle: boolean;
 }
 
 interface ErrorMessage {

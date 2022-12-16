@@ -9,6 +9,10 @@ const store: StoreOptions<UserState> = {
     uid: localStorage.getItem('uid'),
     univId: localStorage.getItem('univId'),
     sessionToken: localStorage.getItem('sessionToken'),
+    reloadToggle: false,
+  },
+  getters: {
+    reloadToggle: (state) => state.reloadToggle,
   },
   actions: {
     async createSession(context, payload: UserCredential) {
@@ -30,6 +34,9 @@ const store: StoreOptions<UserState> = {
     async clearSession(context) {
       localStorage.clear();
       context.commit('clearStore');
+    },
+    updateToggle: (context) => {
+      context.state.reloadToggle = !context.state.reloadToggle;
     },
   },
   mutations: {

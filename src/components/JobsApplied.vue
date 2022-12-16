@@ -81,7 +81,8 @@ import {
   CModalFooter,
 } from '@coreui/vue';
 import moment from 'moment';
-// import { ref } from 'vue';
+import { ref } from 'vue';
+import { mapState } from 'vuex';
 import { urls } from '../config.json';
 import store from '../store';
 import AddJobApplication from './AddJobApplication.vue';
@@ -123,14 +124,31 @@ export default {
        * error messages.
        */
       errors: [],
-      // currentStoreValue: null,
+      /**
+       * reload on form addition.
+       */
+      reloadToggleSrore: ref(store.state.reloadToggle),
     };
   },
   created() {
     this.fetch();
     this.computeSortedOrder();
+    this.unwatch = store.watch(
+      (state, getters) => getters.reloadToggle,
+      (newValue, oldValue) => {
+        console.log(oldValue, newValue);
+        this.reloadToggleSrore = newValue;
+      },
+      {
+        deep: true,
+      // immediate: true --> First old value is undefined
+      },
+    );
   },
   computed: {
+    reloadToggle() {
+      return store.getters.reloadToggle;
+    },
     /**
      * Gets called when the user click on the sort arrow.
      * @return sorted table data
@@ -150,13 +168,13 @@ export default {
       return data;
     },
   },
-  // watch: {
-  //   currentStoreValue: 'test',
-  // },
+  watch: {
+    reloadToggleSrore: 'reload',
+  },
   methods: {
-    // test() {
-    //   console.log('Success');
-    // },
+    reload() {
+      this.fetch();
+    },
     /**
      * Gets called when the component is created.
      * Makes an API call to fetch the data.

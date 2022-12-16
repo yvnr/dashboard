@@ -188,7 +188,7 @@ export default {
           this.time = '';
         }
         console.log(ref(store.state.reloadToggle));
-        store.commit('updateToggle');
+        store.dispatch('updateToggle');
         console.log(ref(store.state.reloadToggle));
 
         // this.items = [res.data, ...this.items];
