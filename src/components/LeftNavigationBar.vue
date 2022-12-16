@@ -6,14 +6,13 @@
       </button>
     </div>
 
-    <h3>Menu</h3>
     <div class="menu">
       <router-link to="/" class="button">
         <span class="material-icons">home</span>
         <span class="text">Applications</span>
       </router-link>
       <router-link to="/companies" class="button">
-        <span class="material-icons">description</span>
+        <span class="material-symbols-outlined">corporate_fare</span>
         <span class="text">Companies</span>
       </router-link>
       <router-link to="/interviewExperiences" class="button">
@@ -79,6 +78,7 @@ aside {
 
     .menu-toggle {
       transition: 0.2s ease-in-out;
+      .material-symbols-outlined,
       .material-icons {
         font-size: 2rem;
         color: var(--light);
@@ -86,6 +86,7 @@ aside {
       }
 
       &:hover {
+        .material-symbols-outlined,
         .material-icons {
           color: var(--primary);
           transform: translateX(0.5rem);
@@ -118,6 +119,7 @@ aside {
       transition: 0.2s ease-in-out;
       padding: 0.5rem 1rem;
 
+      .material-symbols-outlined,
       .material-icons {
         font-size: 2rem;
         color: var(--light);
@@ -131,6 +133,7 @@ aside {
       &:hover {
         background-color: var(--dark-alt);
 
+        .material-symbols-outlined,
         .material-icons,
         .text {
           color: var(--primary);
@@ -141,6 +144,7 @@ aside {
         background-color: var(--dark-alt);
         border-right: 5px solid var(--primary);
 
+        .material-symbols-outlined,
         .material-icons,
         .text {
           color: var(--primary);
@@ -176,6 +180,7 @@ aside {
     }
 
     .button {
+      .material-symbols-outlined,
       .material-icons {
         margin-right: 1rem;
       }

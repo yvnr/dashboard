@@ -10,11 +10,11 @@
         <tr>
           <th
             :key="key"
-            v-for="key in gridColumns"
+            v-for="key in gridKeys"
             @click="sortBy(key)"
             :class="{ active: sortKey == key }"
           >
-            {{ capitalize(key) }}
+            {{ capitalize(gridColumns[key]) }}
             <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
             </span>
           </th>
@@ -22,17 +22,23 @@
       </thead>
       <tbody>
         <tr :key="entry" v-for="entry in filteredData">
-          <td :key="key" v-for="key in gridColumns">
+          <td :key="key" v-for="key in gridKeys">
             {{ entry[key] }}
           </td>
         </tr>
       </tbody>
     </table>
     <p v-else>No matches found.</p>
+    <div class="error" v-for="error in errors" :key="error" >{{error}}</div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+import moment from 'moment';
+import { urls } from '../config.json';
+import store from '../store';
+
 export default {
   name: 'RoleWiseData',
   props: {
@@ -44,16 +50,27 @@ export default {
   data() {
     return {
       /**
+       * Metric Keys.
+       */
+      gridKeys: [
+        'position',
+        'appliedCount',
+        'assessmentCount',
+        'interviewCount',
+        'selectedCount',
+        'rejectCount',
+      ],
+      /**
        * Table column headers.
        */
-      gridColumns: [
-        'Position',
-        'Applied',
-        'Assessment',
-        'Interview',
-        'Accepted',
-        'Rejected',
-      ],
+      gridColumns: {
+        position: 'Position',
+        appliedCount: 'Applied',
+        assessmentCount: 'Assessment',
+        interviewCount: 'Interview',
+        selectedCount: 'Accepted',
+        rejectCount: 'Rejected',
+      },
       /**
        * Table rows.
        */
@@ -98,80 +115,32 @@ export default {
      * Makes an API call to fetch the data
      */
     async fetch() {
-      //   TODO Need to fetch this data from API
-      this.gridData = [
-        {
-          Position: 'SDE-1',
-          Applied: '100',
-          Assessment: '40',
-          Interview: '20',
-          Accepted: '5',
-          Rejected: '25',
-        },
-        {
-          Position: 'SDE-11',
-          Applied: '10',
-          Assessment: '40',
-          Interview: '20',
-          Accepted: '5',
-          Rejected: '25',
-        },
-        {
-          Position: 'SDE-111',
-          Applied: '100',
-          Assessment: '40',
-          Interview: '20',
-          Accepted: '5',
-          Rejected: '25',
-        },
-        {
-          Position: 'Program Analyst',
-          Applied: '100',
-          Assessment: '40',
-          Interview: '20',
-          Accepted: '5',
-          Rejected: '25',
-        },
-        {
-          Position: 'Business Intelligence Manager',
-          Applied: '100',
-          Assessment: '40',
-          Interview: '20',
-          Accepted: '5',
-          Rejected: '25',
-        },
-        {
-          Position: 'Operations Manager',
-          Applied: '100',
-          Assessment: '40',
-          Interview: '20',
-          Accepted: '5',
-          Rejected: '25',
-        },
-        {
-          Position: 'HR Manager',
-          Applied: '100',
-          Assessment: '40',
-          Interview: '20',
-          Accepted: '5',
-          Rejected: '25',
-        },
-        {
-          Position: 'Diector',
-          Applied: '100',
-          Assessment: '40',
-          Interview: '20',
-          Accepted: '5',
-          Rejected: '25',
-        },
-      ];
+      try {
+        const endDate = moment();
+        const startDate = moment().subtract(1, 'years');
+        console.log(startDate, endDate, this.company);
+        const res = await axios.get(urls.analytics.domain + urls.analytics.position_path, {
+          params: { start: startDate.format('YYYY-MM-DD'), end: endDate.format('YYYY-MM-DD'), company: this.company },
+          headers: {
+            'x-uid': store.state.uid,
+            'x-univ-id': store.state.univId,
+            Authorization: `idToken ${store.state.sessionToken}`,
+          },
+        });
+        console.log(res.data);
+        this.gridData = res.data.positionSpecificData;
+        console.log(this.gridData);
+      } catch (error) {
+        console.log(error);
+        this.errors.push(error.response.data.errorMessage);
+      }
     },
     /**
      * Gets called when the component is created.
      * Computes ascending order of each column.
      */
     computeSortedOrder() {
-      this.sortOrders = this.gridColumns.reduce(
+      this.sortOrders = this.gridKeys.reduce(
         (o, key) => ((o[key] = 1), o),
         {},
       );
@@ -197,6 +166,11 @@ export default {
 </script>
 
 <style scoped>
+.error {
+  color: crimson;
+  font-size: 24px;
+  padding-bottom: 1px;
+}
 table {
   border: 2px solid #50ad72;
   border-radius: 3px;

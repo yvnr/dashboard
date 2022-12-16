@@ -204,10 +204,6 @@ export default {
         alert('Please enter position you applied for');
         return true;
       }
-      // if (!this.duration) {
-      //   alert('Please enter duration you applied for');
-      //   return true;
-      // }
       if (!this.jobId) {
         alert('Please enter Job ID');
         return true;
