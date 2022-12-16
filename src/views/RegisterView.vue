@@ -36,6 +36,7 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 import store from '../store';
 import { auth, signInWithCustomToken } from '../store/helpers/firebase_auth';
+import { urls } from '../config.json';
 
 // eslint-disable-next-line no-shadow
 enum ButtonText {
@@ -93,7 +94,7 @@ export default {
         return;
       }
       try {
-        const resp = await axios.post('http://localhost:8000/api/user/register', {
+        const resp = await axios.post(`${urls.record.domain}${urls.record.register_user_path}`, {
           email: email.value, password: password.value, univId: univId.value, name: name.value,
         });
         const { sessionToken } = resp.data;
