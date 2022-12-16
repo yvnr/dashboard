@@ -34,7 +34,7 @@
         </tr>
       </tbody>
     </table>
-    <h3 v-else>You Haven't add your applications yet.</h3>
+    <h3 v-else>You haven't added your applications yet.</h3>
     <div class="error" v-for="error in errors" :key="error">{{ error }}</div>
   </div>
   <CModal
@@ -81,6 +81,7 @@ import {
   CModalFooter,
 } from '@coreui/vue';
 import moment from 'moment';
+// import { ref } from 'vue';
 import { urls } from '../config.json';
 import store from '../store';
 import AddJobApplication from './AddJobApplication.vue';
@@ -122,6 +123,7 @@ export default {
        * error messages.
        */
       errors: [],
+      // currentStoreValue: null,
     };
   },
   created() {
@@ -148,7 +150,13 @@ export default {
       return data;
     },
   },
+  // watch: {
+  //   currentStoreValue: 'test',
+  // },
   methods: {
+    // test() {
+    //   console.log('Success');
+    // },
     /**
      * Gets called when the component is created.
      * Makes an API call to fetch the data.

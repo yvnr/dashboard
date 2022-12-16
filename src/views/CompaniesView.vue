@@ -1,6 +1,6 @@
 <template>
   <main id="companies">
-    <h1>Here, You can see the aggregated results for each company</h1>
+    <h1>Here, you can see the aggregated results for each Company</h1>
     <FilterForCompany @filtered-on-company="filterOnCompany"></FilterForCompany>
     <CompanyWiseData :filter-key="searchObject"></CompanyWiseData>
   </main>

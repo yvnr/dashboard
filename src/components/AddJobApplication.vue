@@ -48,6 +48,7 @@
 <script>
 import axios from 'axios';
 import { CButton } from '@coreui/vue';
+import { ref } from 'vue';
 import { urls } from '../config.json';
 import store from '../store';
 
@@ -186,6 +187,10 @@ export default {
           this.status = '';
           this.time = '';
         }
+        console.log(ref(store.state.reloadToggle));
+        store.commit('updateToggle');
+        console.log(ref(store.state.reloadToggle));
+
         // this.items = [res.data, ...this.items];
       } catch (error) {
         console.log(error);

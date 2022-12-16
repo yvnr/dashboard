@@ -6,7 +6,7 @@
         <InterviewExperience :experience="experience"></InterviewExperience>
       </div>
       </div>
-      <h3 v-else>No Experiences are add yet.</h3>
+      <h3 v-else>No Experiences are added yet.</h3>
     </CAccordion>
   </div>
 </template>

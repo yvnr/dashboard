@@ -1,6 +1,6 @@
 <template>
   <main id="interviewExperiences">
-    <h1>Here, You Can Search for others Interview Experiences</h1>
+    <h1>Here, you can search for Interview Experiences</h1>
     <!-- <FilterForCompany
       @filtered-on-company="setSearchCriteria"
     ></FilterForCompany> -->
