@@ -1,9 +1,12 @@
 <template>
   <div container-fluid>
     <CAccordion always-open>
+      <div v-if="experiences.length">
       <div :key="experience.id" v-for="experience in experiences">
         <InterviewExperience :experience="experience"></InterviewExperience>
       </div>
+      </div>
+      <h3 v-else>No Experiences are add yet.</h3>
     </CAccordion>
   </div>
 </template>

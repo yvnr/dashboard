@@ -32,7 +32,7 @@ export default {
     /**
      * Gets called the dom is loaded
      * selects an material-ui-icon based on input text
-     * @param text aggregate value type
+     * @param {String} text aggregate value type
      * @return material-ui-icon symbol
      */
     selectIcon(text) {
@@ -47,7 +47,7 @@ export default {
     /**
      * Gets called the dom is loaded
      * selects an color based on input text
-     * @param text aggregate value type
+     * @param {String} text aggregate value type
      * @return color value
      */
     selectColor(text) {

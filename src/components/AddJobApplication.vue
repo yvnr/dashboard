@@ -128,6 +128,7 @@ export default {
     /**
      * Gets called when user adds application.
      * makes a POST/PUT API call to persit applicaiton data
+     * @param {Event} e onSubmit event
      */
     async onSubmit(e) {
       e.preventDefault();

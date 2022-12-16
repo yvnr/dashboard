@@ -28,7 +28,7 @@ export default {
     /**
      * Gets called when the user updates the fiter.
      * updates the search object with the user entry
-     * @param searchCriteria search filters set by the user
+     * @param {Object} searchCriteria search filters set by the user
      */
     filterOnCompany(searchCriteria) {
       this.searchObject = searchCriteria;

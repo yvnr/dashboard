@@ -83,6 +83,7 @@ export default {
     /**
      * Gets called when user submits their experience.
      * makes a POST/PUT API call to persit experience data
+     * @param {Event} e onSubmit event
      */
     async onSubmit(e) {
       e.preventDefault();

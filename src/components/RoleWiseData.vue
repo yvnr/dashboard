@@ -155,7 +155,7 @@ export default {
     },
     /**
      * Sort the table data based on given column name.
-     * @param key column name on which the table is sorted
+     * @param {String} key column name on which the table is sorted
      */
     sortBy(key) {
       this.sortKey = key;
@@ -163,7 +163,7 @@ export default {
     },
     /**
      * Capitalizes the given string.
-     * @param str string to be capitalized
+     * @param {String} str string to be capitalized
      * @return capitilazied string
      */
     capitalize(str) {

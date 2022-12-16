@@ -36,7 +36,7 @@
         </tr>
       </tbody>
     </table>
-    <p v-else>No matches found.</p>
+    <h3 v-else>No matches found.</h3>
     <div class="error" v-for="error in errors" :key="error">{{ error }}</div>
   </div>
   <CModal
@@ -221,7 +221,7 @@ export default {
     },
     /**
      * Gets called when user selects a company to check role wise data.
-     * @param company name of company selected
+     * @param {String} company name of company selected
      */
     displayRoleWiseData(company) {
       console.log(company);
@@ -229,7 +229,7 @@ export default {
     },
     /**
      * Sort the table data based on given column name.
-     * @param key column name on which the table is sorted
+     * @param {String} key column name on which the table is sorted
      */
     sortBy(key) {
       this.sortKey = key;
@@ -237,7 +237,7 @@ export default {
     },
     /**
      * Capitalizes the given string.
-     * @param str string to be capitalized
+     * @param {String} str string to be capitalized
      * @return capitilazied string
      */
     capitalize(str) {

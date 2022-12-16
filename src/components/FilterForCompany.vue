@@ -46,6 +46,7 @@ export default {
     /**
      * Gets called when user enters a company name.
      * triggers event to filter the table data
+     * @param {Event} e onSubmit event
      */
     onSubmit(e) {
       e.preventDefault();

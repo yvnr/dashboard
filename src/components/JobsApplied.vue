@@ -34,6 +34,7 @@
         </tr>
       </tbody>
     </table>
+    <h3 v-else>You Haven't add your applications yet.</h3>
     <div class="error" v-for="error in errors" :key="error">{{ error }}</div>
   </div>
   <CModal
@@ -175,7 +176,7 @@ export default {
     },
     /**
      * Format the date in given applications list.
-     * @param jobApplications list of applications
+     * @param {Array} jobApplications list of applications
      * @return list of applications
      */
     formatDateEntries(jobApplications) {
@@ -193,7 +194,7 @@ export default {
     },
     /**
      * Sort the table data based on given column name.
-     * @param key column name on which the table is sorted
+     * @param {String} key column name on which the table is sorted
      */
     sortBy(key) {
       this.sortKey = key;
@@ -201,7 +202,7 @@ export default {
     },
     /**
      * Capitalizes the given string.
-     * @param str string to be capitalized
+     * @param {String} str string to be capitalized
      * @return capitilazied string
      */
     capitalize(str) {
@@ -209,7 +210,7 @@ export default {
     },
     /**
      * Store the data of application selected by user to update.
-     * @param application application selected by user
+     * @param {Object} application application selected by user
      */
     editApplicationData(application) {
       console.log(application);

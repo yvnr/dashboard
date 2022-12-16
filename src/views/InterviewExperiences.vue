@@ -58,7 +58,7 @@ export default {
     /**
      * Gets called when user update search criteria.
      * sets the search criteria to criteria enterd by user
-     * @param searchCriteria search filters set by the user
+     * @param {Object} searchCriteria search filters set by the user
      */
     setSearchCriteria(searchCriteria) {
       console.log(searchCriteria);
