@@ -37,7 +37,7 @@
       </tbody>
     </table>
     <p v-else>No matches found.</p>
-    <div class="error" v-for="error in errors" :key="error" >{{error}}</div>
+    <div class="error" v-for="error in errors" :key="error">{{ error }}</div>
   </div>
   <CModal
     alignment="center"
@@ -145,6 +145,10 @@ export default {
        * company name selected by the user for role wise data.
        */
       currentSelectedCompanyForRoleWiseData: null,
+      /**
+       * error messages.
+       */
+      errors: [],
     };
   },
   created() {
@@ -186,14 +190,20 @@ export default {
       try {
         const endDate = moment();
         const startDate = moment().subtract(1, 'years');
-        const res = await axios.get(urls.analytics.domain + urls.analytics.company_path, {
-          params: { start: startDate.format('YYYY-MM-DD'), end: endDate.format('YYYY-MM-DD') },
-          headers: {
-            'x-uid': store.state.uid,
-            'x-univ-id': store.state.univId,
-            Authorization: `idToken ${store.state.sessionToken}`,
+        const res = await axios.get(
+          urls.analytics.domain + urls.analytics.company_path,
+          {
+            params: {
+              start: startDate.format('YYYY-MM-DD'),
+              end: endDate.format('YYYY-MM-DD'),
+            },
+            headers: {
+              'x-uid': store.state.uid,
+              'x-univ-id': store.state.univId,
+              Authorization: `idToken ${store.state.sessionToken}`,
+            },
           },
-        });
+        );
         console.log(res.data);
         this.gridData = res.data.companySpecificData;
         console.log(this.gridData);
@@ -207,10 +217,7 @@ export default {
      * Computes ascending order of each column.
      */
     computeSortedOrder() {
-      this.sortOrders = this.gridKeys.reduce(
-        (o, key) => ((o[key] = 1), o),
-        {},
-      );
+      this.sortOrders = this.gridKeys.reduce((o, key) => ((o[key] = 1), o), {});
     },
     /**
      * Gets called when user selects a company to check role wise data.

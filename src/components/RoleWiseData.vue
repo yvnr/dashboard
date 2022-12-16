@@ -29,7 +29,7 @@
       </tbody>
     </table>
     <p v-else>No matches found.</p>
-    <div class="error" v-for="error in errors" :key="error" >{{error}}</div>
+    <div class="error" v-for="error in errors" :key="error">{{ error }}</div>
   </div>
 </template>
 
@@ -83,6 +83,10 @@ export default {
        * Sorted order of the data in the table.
        */
       sortOrders: {},
+      /**
+       * error messages.
+       */
+      errors: [],
     };
   },
   created() {
@@ -119,14 +123,21 @@ export default {
         const endDate = moment();
         const startDate = moment().subtract(1, 'years');
         console.log(startDate, endDate, this.company);
-        const res = await axios.get(urls.analytics.domain + urls.analytics.position_path, {
-          params: { start: startDate.format('YYYY-MM-DD'), end: endDate.format('YYYY-MM-DD'), company: this.company },
-          headers: {
-            'x-uid': store.state.uid,
-            'x-univ-id': store.state.univId,
-            Authorization: `idToken ${store.state.sessionToken}`,
+        const res = await axios.get(
+          urls.analytics.domain + urls.analytics.position_path,
+          {
+            params: {
+              start: startDate.format('YYYY-MM-DD'),
+              end: endDate.format('YYYY-MM-DD'),
+              company: this.company,
+            },
+            headers: {
+              'x-uid': store.state.uid,
+              'x-univ-id': store.state.univId,
+              Authorization: `idToken ${store.state.sessionToken}`,
+            },
           },
-        });
+        );
         console.log(res.data);
         this.gridData = res.data.positionSpecificData;
         console.log(this.gridData);
@@ -140,10 +151,7 @@ export default {
      * Computes ascending order of each column.
      */
     computeSortedOrder() {
-      this.sortOrders = this.gridKeys.reduce(
-        (o, key) => ((o[key] = 1), o),
-        {},
-      );
+      this.sortOrders = this.gridKeys.reduce((o, key) => ((o[key] = 1), o), {});
     },
     /**
      * Sort the table data based on given column name.

@@ -34,7 +34,7 @@
         </tr>
       </tbody>
     </table>
-    <div class="error" v-for="error in errors" :key="error" >{{error}}</div>
+    <div class="error" v-for="error in errors" :key="error">{{ error }}</div>
   </div>
   <CModal
     alignment="center"
@@ -117,6 +117,10 @@ export default {
        * row data being updated by the user.
        */
       applicationSelectedToEdit: null,
+      /**
+       * error messages.
+       */
+      errors: [],
     };
   },
   created() {
@@ -150,14 +154,17 @@ export default {
      */
     async fetch() {
       try {
-        const res = await axios.get(urls.tracker.domain + urls.tracker.application_path, {
-          params: { startId: 1, numberOfRecords: 2000 },
-          headers: {
-            'x-uid': store.state.uid,
-            'x-univ-id': store.state.univId,
-            Authorization: `idToken ${store.state.sessionToken}`,
+        const res = await axios.get(
+          urls.tracker.domain + urls.tracker.application_path,
+          {
+            params: { startId: 1, numberOfRecords: 2000 },
+            headers: {
+              'x-uid': store.state.uid,
+              'x-univ-id': store.state.univId,
+              Authorization: `idToken ${store.state.sessionToken}`,
+            },
           },
-        });
+        );
         console.log(res.data.jobApplications);
         this.gridData = this.formatDateEntries(res.data.jobApplications);
         console.log(this.gridData);

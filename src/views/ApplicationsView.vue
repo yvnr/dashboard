@@ -1,5 +1,6 @@
 <template>
   <main id="applications">
+    <div class="error" v-for="error in errors" :key="error">{{ error }}</div>
     <AggregateValueList :aggregateValues="aggregateValues"></AggregateValueList>
     <AddJobApplicationModal />
     <JobsApplied></JobsApplied>
@@ -7,6 +8,9 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { urls } from '../config.json';
+import store from '../store';
 import '@coreui/coreui/dist/css/coreui.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AggregateValueList from '../components/AggregateValueList.vue';
@@ -30,6 +34,10 @@ export default {
        * Aggregate values list.
        */
       aggregateValues: [],
+      /**
+       * error messages.
+       */
+      errors: [],
     };
   },
   created() {
@@ -41,12 +49,36 @@ export default {
      * Makes an API call to fetch the data.
      */
     async fetchAggregateValues() {
-      // TODO: this data needs to be fetched from backend service
-      this.aggregateValues = [
-        { id: 1, text: 'Jobs Applied In Total', value: 400 },
-        { id: 2, text: 'Applications In Progress', value: 300 },
-        { id: 3, text: 'Offers', value: 10 },
-      ];
+      try {
+        const res = await axios.get(
+          urls.tracker.domain + urls.tracker.aggregate_path,
+          {
+            headers: {
+              'x-uid': store.state.uid,
+              'x-univ-id': store.state.univId,
+              Authorization: `idToken ${store.state.sessionToken}`,
+            },
+          },
+        );
+        console.log(res.data);
+        this.aggregateValues = [
+          {
+            id: 1,
+            text: 'Jobs Applied In Total',
+            value: res.data.totalApplicationsCount,
+          },
+          {
+            id: 2,
+            text: 'Applications In Progress',
+            value: res.data.inProgressCount,
+          },
+          { id: 3, text: 'Offers', value: res.data.offersCount },
+        ];
+        console.log(this.aggregateValues);
+      } catch (error) {
+        console.log(error);
+        this.errors.push(error.response.data.errorMessage);
+      }
     },
     /**
      * Gets called when the user click on Add Application.
@@ -58,3 +90,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.error {
+  color: crimson;
+  font-size: 24px;
+  padding-bottom: 1px;
+}
+</style>
