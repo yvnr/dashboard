@@ -5,7 +5,8 @@
         },
         "tracker": {
             "domain": "http://127.0.0.1:8020/job-board-a3cdd/us-central1/api/api",
-            "path": "/application"
+            "application_path": "/application",
+            "aggregate_path": "/application/data"
         },
         "analytics": {
             "domain": "http://127.0.0.1:8020/job-board-a3cdd/us-central1/api/api",

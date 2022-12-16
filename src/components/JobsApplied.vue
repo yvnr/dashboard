@@ -150,7 +150,7 @@ export default {
      */
     async fetch() {
       try {
-        const res = await axios.get(urls.tracker.domain + urls.tracker.path, {
+        const res = await axios.get(urls.tracker.domain + urls.tracker.application_path, {
           params: { startId: 1, numberOfRecords: 2000 },
           headers: {
             'x-uid': store.state.uid,

@@ -148,7 +148,7 @@ export default {
       try {
         if (this.update) {
           const res = await axios.put(
-            `${urls.tracker.domain}${urls.tracker.path}/${this.application.id}`,
+            `${urls.tracker.domain}${urls.tracker.application_path}/${this.application.id}`,
             application,
             {
               headers: {
@@ -164,7 +164,7 @@ export default {
           );
         } else {
           const res = await axios.post(
-            urls.tracker.domain + urls.tracker.path,
+            urls.tracker.domain + urls.tracker.application_path,
             application,
             {
               headers: {
