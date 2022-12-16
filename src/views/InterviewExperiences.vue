@@ -4,7 +4,9 @@
     <FilterForCompany
       @filtered-on-company="setSearchCriteria"
     ></FilterForCompany>
-    <AddInterviewExperienceModal :displayAddInterviewExperience="displayAddInterviewExperience"></AddInterviewExperienceModal>
+    <AddInterviewExperienceModal
+      :displayAddInterviewExperience="displayAddInterviewExperience"
+    ></AddInterviewExperienceModal>
     <ExperiencesList :experiences="experiences"></ExperiencesList>
   </main>
 </template>
@@ -24,8 +26,17 @@ export default {
   },
   data() {
     return {
+      /**
+       * copmany details entered by user to filter experiences data.
+       */
       searchCriteria: {},
+      /**
+       * Experiences list.
+       */
       experiences: [],
+      /**
+       * Flag to control the Interview Experiences Form visibility.
+       */
       displayAddInterviewExperience: false,
     };
   },
@@ -36,9 +47,18 @@ export default {
     searchCriteria: 'fetchInterviewExpereinces',
   },
   methods: {
+    /**
+     * Gets called when user update search criteria.
+     * sets the search criteria to criteria enterd by user
+     * @param searchCriteria search filters set by the user
+     */
     setSearchCriteria(searchCriteria) {
       this.searchCriteria = searchCriteria;
     },
+    /**
+     * Gets called when the search criteria is updated.
+     * Makes an API call to fetch the data.
+     */
     async fetchInterviewExpereinces() {
       console.log(this.searchCriteria);
       try {
@@ -55,7 +75,9 @@ export default {
             id: res.data[i].id,
             role: res.data[i].role,
             result: 'Accepted',
-            on: new Date(res.data[i].createdAt.seconds * 1000).toLocaleDateString(),
+            on: new Date(
+              res.data[i].createdAt.seconds * 1000,
+            ).toLocaleDateString(),
             data: res.data[i].summary,
           });
         }

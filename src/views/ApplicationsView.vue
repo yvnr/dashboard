@@ -22,19 +22,36 @@ export default {
   },
   data() {
     return {
+      /**
+       * Flag to control the Applications Form visibility.
+       */
       showAddJobApplication: false,
+      /**
+       * Aggregate values list.
+       */
       aggregateValues: [],
     };
   },
   created() {
-    // TODO: this data needs to be fetched from backend service
-    this.aggregateValues = [
-      { id: 1, text: 'Jobs Applied In Total', value: 400 },
-      { id: 2, text: 'Applications In Progress', value: 300 },
-      { id: 3, text: 'Offers', value: 10 },
-    ];
+    this.fetchAggregateValues();
   },
   methods: {
+    /**
+     * Gets called when the component is created.
+     * Makes an API call to fetch the data.
+     */
+    async fetchAggregateValues() {
+      // TODO: this data needs to be fetched from backend service
+      this.aggregateValues = [
+        { id: 1, text: 'Jobs Applied In Total', value: 400 },
+        { id: 2, text: 'Applications In Progress', value: 300 },
+        { id: 3, text: 'Offers', value: 10 },
+      ];
+    },
+    /**
+     * Gets called when the user click on Add Application.
+     * toggles the Application form display
+     */
     toggleAddJobAppliation() {
       this.showAddJobApplication = !this.showAddJobApplication;
     },
