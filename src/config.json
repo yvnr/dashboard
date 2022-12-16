@@ -4,8 +4,8 @@
             "domain": "http://localhost:"
         },
         "tracker": {
-            "domain": "http://localhost:8080/api/tracker",
-            "post_applications": "/application"
+            "domain": "http://127.0.0.1:8020/job-board-a3cdd/us-central1/api/api",
+            "path": "/application"
         }
     }
 }
