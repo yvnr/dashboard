@@ -3,7 +3,8 @@
         "record": {
             "domain": "http://127.0.0.1:8020/job-board-a3cdd/us-central1/api/api",
             "path": "/experience",
-            "register_user_path": "/user/register"
+            "register_user_path": "/user/register",
+            "university_path": "/university"
         },
         "tracker": {
             "domain": "http://127.0.0.1:8020/job-board-a3cdd/us-central1/api/api",

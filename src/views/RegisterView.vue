@@ -44,20 +44,27 @@ enum ButtonText {
     'SigningUp' ='Signing up'
 }
 
+/**
+ * Register component for the register form
+ * This is displayed on the /register route
+ */
 export default {
   name: 'RegisterComponent',
   setup() {
-    const name = ref('');
-    const email = ref('');
-    const univId = ref('');
-    const password = ref('');
-    const errors = ref([] as string[]);
-    const univList = ref([] as {id: string, name:string, emailDomains: string[]}[]);
-    const isDisabled = ref(false);
-    const btnTxt = ref(ButtonText.SignUp);
+    const name = ref(''); // name is linked with name field
+    const email = ref(''); // email is linked with email field
+    const univId = ref(''); // univId is linked to the university selection field
+    const password = ref(''); // password is linked with password field
+    const errors = ref([] as string[]); // errors value - used to display the error if the user login is not successful
+    const univList = ref([] as {id: string, name:string, emailDomains: string[]}[]); // list of all universities(fecthes from the backend)
+    const isDisabled = ref(false); // variable - used to disable the login button once clicked
+    const btnTxt = ref(ButtonText.SignUp); // used to update the button text
 
     const router = useRouter();
 
+    /**
+     * function to validating signup values
+     */
     function validateForm() {
       const errorMessage: string[] = [];
 
@@ -84,6 +91,14 @@ export default {
       return errorMessage;
     }
 
+    /**
+     * this is function called when user submits the register button
+     * If field values are proper, we will send POST request to /api/user/register endpoint
+     * If the repsonse is success, we will be recieving the custom token. With the custom token,
+     * we will sign with firebase IDP auth method(signInWithCustomToken)
+     * After successful signing in, we will store the user sessionToken in the local storage and vuex store by calling the createSession method.
+     * If register endpoint repsonse fails, we updated the error value and displays it.
+     */
     async function register() {
       isDisabled.value = true;
       btnTxt.value = ButtonText.SigningUp;
@@ -110,9 +125,15 @@ export default {
       }
     }
 
+    /**
+     * Keeping async requests in the watchEffect,
+     * Updating the corresponding response in the form
+     *
+     * Calling an university - GET /api/university endpionts to list all the universities in the register form
+     */
     watchEffect(async () => {
       try {
-        const resp = await axios.get('http://localhost:8000/api/university');
+        const resp = await axios.get(`${urls.record.domain}${urls.record.university_path}`);
         console.log(resp);
         univList.value = resp.data;
       } catch (err: any) {

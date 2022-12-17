@@ -21,5 +21,7 @@ module.exports = {
     'no-param-reassign': 'off',
     'no-underscore-dangle': 'off',
     'no-restricted-syntax': 'off',
+    'import/extensions': 'off',
+    'import/no-unresolved': 0,
   },
 };

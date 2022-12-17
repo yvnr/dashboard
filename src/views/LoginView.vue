@@ -31,16 +31,24 @@ enum ButtonText {
     'LoggingIn' ='Logging in'
 }
 
+/**
+ * Login component for the login form
+ * This is displayed on the /login route
+ */
 export default defineComponent({
   name: 'loginView',
   setup() {
-    const email = ref('');
-    const password = ref('');
-    const errors = ref([] as string[]);
-    const isDisabled = ref(false);
-    const btnTxt = ref(ButtonText.Login);
+    const email = ref(''); // email is linked with email field
+    const password = ref(''); // password is linked with password field
+    const errors = ref([] as string[]); // errors value - used to display the error if the user login is not successful
+    const isDisabled = ref(false); //  variable - used to disable the login button once clicked
+    const btnTxt = ref(ButtonText.Login); // used to update the button text
+
     const router = useRouter();
 
+    /**
+     * function to validating login form values
+     */
     function validateForm() {
       const errorMessage: string[] = [];
       if (!email.value || !email.value.includes('@')) {
@@ -52,6 +60,13 @@ export default defineComponent({
       }
       return errorMessage;
     }
+
+    /**
+     * this is function called when user submits the login button
+     * If field values are proper, we will signIn with firebase IDP auth method(signInWithEmailAndPassword)
+     * If login is successful, we will store the user sessionToken in the local storage and vuex store by calling the createSession method.
+     * If login fails, we updated the error value and displays it.
+     */
     async function login() {
       isDisabled.value = true;
       btnTxt.value = ButtonText.LoggingIn;
