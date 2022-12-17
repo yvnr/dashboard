@@ -9,6 +9,7 @@
 
 <script>
 import axios from 'axios';
+import { ref } from 'vue';
 import { urls } from '../config.json';
 import store from '../store';
 import '@coreui/coreui/dist/css/coreui.min.css';
@@ -38,12 +39,32 @@ export default {
        * error messages.
        */
       errors: [],
+      /**
+       * reload on form addition.
+       */
+      reloadToggleSrore: ref(store.state.reloadToggle),
     };
   },
   created() {
     this.fetchAggregateValues();
+    this.unwatch = store.watch(
+      (state, getters) => getters.reloadToggle,
+      (newValue, oldValue) => {
+        console.log(oldValue, newValue);
+        this.reloadToggleSrore = newValue;
+      },
+      {
+        deep: true,
+      },
+    );
+  },
+  watch: {
+    reloadToggleSrore: 'updateAggregateValues',
   },
   methods: {
+    updateAggregateValues() {
+      this.fetchAggregateValues();
+    },
     /**
      * Gets called when the component is created.
      * Makes an API call to fetch the data.
