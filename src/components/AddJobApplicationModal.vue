@@ -19,7 +19,7 @@
     </CModalBody>
     <CModalFooter>
       <CButton
-        color="primary  "
+        color="danger"
         @click="
           () => {
             visibleVerticallyCenteredDemo = false;

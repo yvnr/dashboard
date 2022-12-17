@@ -40,7 +40,7 @@
       </label>
     </div>
     <div class="error" v-for="error in errors" :key="error" >{{error}}</div>
-    <CButton type="submit" class="button">Submit</CButton>
+    <CButton color="success" type="submit" class="button"  size="lg">Submit</CButton>
   </form>
  </div>
 </template>
@@ -237,7 +237,7 @@ export default {
   padding-bottom: 1px;
 }
 .button {
-  background-color: var(--light-grey);
+  /* background-color: var(--light-grey); */
   border-style: groove;
 }
 

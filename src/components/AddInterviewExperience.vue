@@ -35,7 +35,7 @@
       </label>
     </div>
     <div class="error" v-for="error in errors" :key="error" >{{error}}</div>
-    <CButton type="submit" class="button">Submit</CButton>
+    <CButton color="success" type="submit" class="button" size="lg">Submit</CButton>
   </form>
  </div>
 </template>
@@ -165,7 +165,7 @@ export default {
 }
 
 .button {
-  background-color: var(--light-grey);
+  /* background-color: var(--light-grey); */
   border-style: groove;
 }
 
@@ -187,7 +187,7 @@ export default {
 }
 .form-control textarea {
   width: 100%;
-  height: 200px;
+  height: 160px;
   margin: 5px;
   padding: 3px 7px;
   font-size: 17px;
