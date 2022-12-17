@@ -1,9 +1,9 @@
 <template>
   <main id="interviewExperiences">
     <h1>Here, you can search for Interview Experiences</h1>
-    <!-- <FilterForCompany
+    <FilterForCompany
       @filtered-on-company="setSearchCriteria"
-    ></FilterForCompany> -->
+    ></FilterForCompany>
     <AddInterviewExperienceModal
       :displayAddInterviewExperience="displayAddInterviewExperience"
     ></AddInterviewExperienceModal>
@@ -18,14 +18,14 @@ import moment from 'moment';
 import { ref } from 'vue';
 import { urls } from '../config.json';
 import store from '../store';
-// import FilterForCompany from '../components/FilterForCompany.vue';
+import FilterForCompany from '../components/FilterForCompany.vue';
 import ExperiencesList from '../components/ExperiencesList.vue';
 import AddInterviewExperienceModal from '../components/AddInterviewExperienceModal.vue';
 
 export default {
   name: 'InterviewExperiences',
   components: {
-    // FilterForCompany,
+    FilterForCompany,
     ExperiencesList,
     AddInterviewExperienceModal,
   },
@@ -85,9 +85,20 @@ export default {
      * Makes an API call to fetch the data.
      */
     async fetchInterviewExpereinces() {
-      console.log(this.searchCriteria);
+      if (this.searchCriteria.company) {
+        console.log(this.searchCriteria);
+      } else {
+        console.log('searchCriteria is empty');
+      }
       try {
-        const res = await axios.get(urls.record.domain + urls.record.path, {
+        const res = (this.searchCriteria.company) ? await axios.get(urls.record.domain + urls.record.path, {
+          params: { company: this.searchCriteria.company },
+          headers: {
+            'x-uid': store.state.uid,
+            'x-univ-id': store.state.univId,
+            Authorization: `idToken ${store.state.sessionToken}`,
+          },
+        }) : await axios.get(urls.record.domain + urls.record.path, {
           headers: {
             'x-uid': store.state.uid,
             'x-univ-id': store.state.univId,

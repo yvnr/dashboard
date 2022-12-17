@@ -169,9 +169,9 @@ export default {
   border-style: groove;
 }
 
-.add-form {
-  margin-bottom: 40px;
-}
+/* .add-form {
+  margin-bottom: 10px;
+} */
 .form-control {
   margin: 20px 0;
 }

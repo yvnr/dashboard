@@ -241,9 +241,9 @@ export default {
   border-style: groove;
 }
 
-.add-form {
+/* .add-form {
   margin-bottom: 40px;
-}
+} */
 .form-control {
   margin: 20px 0;
 }
